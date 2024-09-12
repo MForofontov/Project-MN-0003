@@ -151,6 +151,8 @@ CSRF_TRUSTED_ORIGINS = [
     # Add other trusted origins here
 ]
 
+CSRF_COOKIE_HTTPONLY = True # Enable this for better security in production
+
 CORS_ALLOW_CREDENTIALS = True
 
 AUTH_USER_MODEL = 'users.CustomUser'

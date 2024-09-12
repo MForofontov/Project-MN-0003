@@ -3,12 +3,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from api.serializers import UserSerializer, UserProfileSerializer
 from django.contrib.auth import get_user_model
+from rest_framework.decorators import permission_classes
 
 # Import the user model
 User = get_user_model()
 
 # View to create a new user
 class UserCreateView(generics.CreateAPIView):
+    permission_classes = [permissions.AllowAny]
     # Allow only POST requests
     http_method_names = ['post']
     # Specify the serializer class to use

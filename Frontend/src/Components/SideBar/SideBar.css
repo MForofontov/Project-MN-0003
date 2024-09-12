@@ -1,0 +1,41 @@
+/* src/components/Profile/SideBar.css */
+.sidebar {
+    position: absolute; /* Position the sidebar absolutely within the parent */
+    top: 0;
+    left: -250px; /* Initial position off-screen */
+    width: 250px; /* Sidebar width */
+    height: 100%; /* Make the sidebar take up 100% of the parent div's height */
+    transition: left 0.3s ease; /* Smooth transition for sliding in */
+    z-index: 1; /* Ensure the sidebar stays below the header */
+    overflow: hidden; /* Hide overflow content */
+  }
+  
+  .sidebar.visible {
+    left: 0; /* Slide in the sidebar */
+    background-color: #575757;
+  }
+  
+  .sidebar h2 {
+    color: white;
+    text-align: center;
+  }
+  
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar ul li {
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .sidebar ul li a:hover {
+    background-color: #575757;
+  }

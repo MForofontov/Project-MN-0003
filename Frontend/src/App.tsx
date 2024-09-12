@@ -1,35 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, {useState} from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from './utils/AuthContext';
+import Header from "./Components/Header/Header";
+import Auth from "./Components/Auth/Auth";
+import Footer from "./Components/Footer/Footer";
+import HomePage from "./Components/HomePage/HomePage";
+import PrivateRoute from "./utils/PrivateRoute";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
+  const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(false);
+
+    // Function to toggle sidebar visibility
+    const toggleSidebar = () => {
+      setIsSidebarVisible(!isSidebarVisible);
+    };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <AuthProvider>
+      <Router>
+        <Header toggleSidebar={toggleSidebar} />
+          <Routes>
+            <Route path="/" element={<HomePage />} /> {/* Add a home route */}
+            <Route path="/login" element={<Auth />} />
+            {/* <Route path="/dashboard" element={<PrivateRoute component={Dashboard} isSidebarVisible = {isSidebarVisible} />} /> */}
+            {/* Add more routes as needed */}
+          </Routes>
+        <Footer />
+      </Router>
+    </AuthProvider>
+  );
+};
 
-export default App
+export default App;
