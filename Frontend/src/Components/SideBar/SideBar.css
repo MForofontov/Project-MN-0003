@@ -10,32 +10,39 @@
     overflow: hidden; /* Hide overflow content */
   }
   
-  .sidebar.visible {
-    left: 0; /* Slide in the sidebar */
-    background-color: #575757;
-  }
+.sidebar.visible {
+  left: 0; /* Slide in the sidebar */
+  background-color: #575757;
+}
+
+.sidebar h2 {
+  color: white;
+  text-align: center;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 8px;
+  text-align: center;
+}
+
+.sidebar button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+  padding: 10px 20px; /* Adjust padding for size */
+  border-radius: 12px; /* Semi-rounded corners */
+  width: 100%; /* Full width of the container */
+  text-align: left; /* Align text to the left */
+}
+
+.sidebar button:hover {
+  background-color: gray;
   
-  .sidebar h2 {
-    color: white;
-    text-align: center;
-  }
-  
-  .sidebar ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .sidebar ul li {
-    padding: 8px;
-    text-align: center;
-  }
-  
-  .sidebar ul li a {
-    color: white;
-    text-decoration: none;
-    display: block;
-  }
-  
-  .sidebar ul li a:hover {
-    background-color: #575757;
-  }
+}

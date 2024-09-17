@@ -1,0 +1,96 @@
+.dashboard-container {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+  }
+  
+  .sidebar-visible .dashboard-main {
+    margin-left: 250px; /* Adjust based on sidebar width */
+    width: calc(100% - 290px); /* Adjust width to prevent overflow (250px + all subdivisions) */
+  }
+  
+  .dashboard-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+  }
+  
+  .dashboard-header {
+    background-color: hsl(0, 0%, 30%);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .dashboard-header h1 {
+    margin: 0;
+    font-size: 24px;
+    color: hsl(0, 0%, 100%);
+  }
+  
+  .dashboard-header p {
+    margin: 5px 0 0;
+    color: #666;
+  }
+  
+  .dashboard-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .dashboard-section {
+    background-color: hsl(0, 0%, 30%);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .records-overview-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .vertical-dots-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .date-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .date-filter label {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+  }
+  
+  .date-filter input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .dashboard-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .dashboard-button:hover {
+    background-color: #0056b3;
+  }

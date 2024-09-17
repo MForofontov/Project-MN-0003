@@ -6,10 +6,12 @@ import Auth from "./Components/Auth/Auth";
 import Footer from "./Components/Footer/Footer";
 import HomePage from "./Components/HomePage/HomePage";
 import PrivateRoute from "./utils/PrivateRoute";
+import DashBoard from "./Components/DashBoard/DashBoard";
 
 const App: React.FC = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(false);
 
+{ useState } 
     // Function to toggle sidebar visibility
     const toggleSidebar = () => {
       setIsSidebarVisible(!isSidebarVisible);
@@ -22,7 +24,7 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<HomePage />} /> {/* Add a home route */}
             <Route path="/login" element={<Auth />} />
-            {/* <Route path="/dashboard" element={<PrivateRoute component={Dashboard} isSidebarVisible = {isSidebarVisible} />} /> */}
+            <Route path="/dashboard" element={<PrivateRoute component={DashBoard} isSidebarVisible = {isSidebarVisible} />} />
             {/* Add more routes as needed */}
           </Routes>
         <Footer />

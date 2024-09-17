@@ -20,7 +20,7 @@ const Auth: React.FC = () => {
         try {
             await login(email, password);
             // Handle successful user creation (e.g., redirect, show message)
-            navigate('/profile');
+            navigate('/dashboard');
         } catch (error) {
             console.error('Error creating user:', error);
             // Handle error (e.g., show error message)
@@ -32,7 +32,7 @@ const Auth: React.FC = () => {
         try {
             await CreateUserAPI(email, password);
             // Handle successful user creation (e.g., redirect, show message)
-            navigate('/profile');
+            navigate('/dashboard');
         } catch (error) {
             console.error('Error creating user:', error);
             // Handle error (e.g., show error message)
@@ -40,7 +40,7 @@ const Auth: React.FC = () => {
     };
 
     if (isAuthenticated) {
-        navigate('/profile');
+        navigate('/dashboard');
     }
 
     if (isAuthenticated === null) {

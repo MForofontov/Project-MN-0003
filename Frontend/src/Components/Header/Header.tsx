@@ -18,6 +18,10 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
         navigate('/login/');
     };
 
+    const handleNavigation = (path: string) => {
+        navigate(path);
+      };
+
     return (
         <header className="header">
             {isAuthenticated ? (<button onClick={toggleSidebar} className="sidebar-toggle-button">☰</button>
@@ -26,14 +30,22 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
             <div className="logo">My Website</div>
             <nav>
                 <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/services">Services</a></li>
-                    <li><a href="/contact">Contact</a></li>
+                     <li>
+                        <button className='list-button' onClick={() => handleNavigation('/')}>Home</button>
+                    </li>
+                    <li>
+                        <button className='list-button' onClick={() => handleNavigation('/about')}>About</button>
+                    </li>
+                    <li>
+                        <button className='list-button' onClick={() => handleNavigation('/services')}>Services</button>
+                    </li>
+                    <li>
+                        <button className='list-button' onClick={() => handleNavigation('/contact')}>Contact</button>
+                    </li>
                     {isAuthenticated ? (
-                        <li><button onClick={handlelogout}>Logout</button></li>
+                        <li><button className='logout-button' onClick={handlelogout}>Logout</button></li>
                     ) : (
-                        <li><a href="/login">Login</a></li>
+                        <li><button className='login-button' onClick={() => handleNavigation('/login')}>Login</button></li>
                     )}
                 </ul>
             </nav>

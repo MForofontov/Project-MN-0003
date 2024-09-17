@@ -4,20 +4,27 @@ import './SideBar.css'; // Import the CSS file
 
 interface SideBarProps {
     isSidebarVisible: boolean;
+    setActiveView: (view: string) => void;
   }
   
-  const SideBar: React.FC<SideBarProps> = ({ isSidebarVisible }) => {
-    return (
-      <div className={`sidebar ${isSidebarVisible ? 'visible' : ''}`}>
-        <h2>SideBar</h2>
-        <ul>
-          <li><a href="#home">Home</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#clients">Clients</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </div>
-    );
-  };
-  
-  export default SideBar;
+const SideBar: React.FC<SideBarProps> = ({ isSidebarVisible, setActiveView }) => {
+
+  return (
+    <div className={`sidebar ${isSidebarVisible ? 'visible' : ''}`}>
+      <h2>SideBar</h2>
+      <ul>
+        <li>
+          <button onClick={() => setActiveView('Upload File')}>Upload File</button>
+        </li>
+        <li>
+          <button onClick={() => setActiveView('View Files')}>View Files</button>
+        </li>
+        <li>
+          <button onClick={() => setActiveView('Analysis')}>Music Analysis Results</button>
+        </li>
+      </ul>
+    </div>
+  );
+};
+
+export default SideBar;
