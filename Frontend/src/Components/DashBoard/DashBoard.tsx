@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../../services/api';
 import SideBar from '../SideBar/SideBar';
-import FileUpload from './DashboardContentMain/FileUpload';
+import FileUpload from './FileUpload/FileUpload';
 import './DashBoard.css';
-
-interface Account {
-  id: number;
-  name: string;
-  balance: number;
-  currency_symbol: string;
-}
 
 interface DashBoardProps {
     isSidebarVisible: boolean;

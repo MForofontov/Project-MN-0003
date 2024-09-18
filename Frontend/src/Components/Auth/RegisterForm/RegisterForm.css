@@ -1,0 +1,15 @@
+.register-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.auth-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #61dafb;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
