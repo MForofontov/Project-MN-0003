@@ -1,0 +1,9 @@
+.toggle-text {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.toggle-text span {
+    color: #61dafb;
+    cursor: pointer;
+}

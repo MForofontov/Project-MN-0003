@@ -1,0 +1,15 @@
+.sidebar-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: inherit;
+    padding: 0;
+    padding: 10px 20px; /* Adjust padding for size */
+    border-radius: 12px; /* Semi-rounded corners */
+    width: 100%; /* Full width of the container */
+    text-align: left; /* Align text to the left */
+  }
+
+.sidebar-button:hover {
+    background-color: gray;
+}  
