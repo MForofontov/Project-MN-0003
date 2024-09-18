@@ -16,8 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("api.urls")),
 ]
+
+# Check if the DEBUG setting is True, which indicates that the project is in development mode.
+if settings.DEBUG:
+    # Append URL patterns to serve media files during development.
+    # static() is a helper function that generates URL patterns for serving files from MEDIA_ROOT at MEDIA_URL.
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
