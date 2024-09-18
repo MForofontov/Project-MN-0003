@@ -1,0 +1,25 @@
+.list-button {
+    background-color: hsl(0, 0%, 30%);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .list-button:hover {
+    background-color: #555;
+  }
+  
+  .logout-button, .login-button {
+    background-color: hsl(0, 0%, 30%);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .logout-button:hover, .login-button:hover {
+    background-color: #555;
+  }

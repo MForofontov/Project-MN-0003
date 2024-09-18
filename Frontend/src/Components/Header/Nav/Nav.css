@@ -1,0 +1,11 @@
+nav ul {
+    display: flex;
+    gap: 15px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  nav ul li {
+    display: inline;
+  }

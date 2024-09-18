@@ -1,0 +1,12 @@
+.sidebar-toggle-button {
+    background-color: hsl(0, 0%, 30%);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .sidebar-toggle-button:hover {
+    background-color: #555;
+  }
