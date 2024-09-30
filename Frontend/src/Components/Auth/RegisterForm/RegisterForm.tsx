@@ -1,7 +1,7 @@
 import React from 'react';
 import FormGroup from '../FormGroup/FormGroup';
 import ToggleText from '../ToggleText/ToggleText';
-import './LoginForm.css';
+import './RegisterForm.css';
 
 interface RegisterFormProps {
   email: string;
