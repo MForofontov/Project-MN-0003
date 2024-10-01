@@ -25,6 +25,8 @@ class UserCreateView(generics.CreateAPIView):
         user = serializer.save()
         # Get the headers for the response
         headers = self.get_success_headers(serializer.data)
+        # Optionally: Add any post-creation logic here (e.g., sending a welcome email)
+        
         # Return the serialized data with a 201 Created status
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
