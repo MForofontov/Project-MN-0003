@@ -6,7 +6,33 @@ from django.utils import timezone
 # Create your models here.
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
+    """
+    Custom manager for CustomUser model.
+    """
+
+    def create_user(self, email: str, password: str = None, **extra_fields: dict) -> 'CustomUser':
+        """
+        Create and return a regular user with an email and password.
+
+        Parameters
+        ----------
+        email : str
+            The email address of the user.
+        password : str, optional
+            The password for the user.
+        **extra_fields : dict
+            Additional fields for the user.
+
+        Returns
+        -------
+        CustomUser
+            The created user instance.
+
+        Raises
+        ------
+        ValueError
+            If the email is not provided.
+        """
         if not email:
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
@@ -15,12 +41,32 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password=None, **extra_fields):
+    def create_superuser(self, email: str, password: str = None, **extra_fields: dict) -> 'CustomUser':
+        """
+        Create and return a superuser with an email and password.
+
+        Parameters
+        ----------
+        email : str
+            The email address of the superuser.
+        password : str, optional
+            The password for the superuser.
+        **extra_fields : dict
+            Additional fields for the superuser.
+
+        Returns
+        -------
+        CustomUser
+            The created superuser instance.
+        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(email, password, **extra_fields)
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    """
+    Custom user model that uses email instead of username.
+    """
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
@@ -36,22 +82,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+    def __str__(self) -> str:
+        """
+        Return a string representation of the user.
 
-    def __str__(self):
+        Returns
+        -------
+        str
+            The email of the user.
+        """
         return self.email
 
-
 User = get_user_model()
-    
-def report_directory_path(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/reports/user_<id>/<filename>
-    return 'reports/user_{0}/{1}'.format(instance.user.id, filename)
 
-class Report(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reports')
-    title = models.CharField(max_length=255)
-    file = models.FileField(upload_to=report_directory_path)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
-from users.models import MusicFile
+from music.models import MusicFile
 
 User = get_user_model() # This will refer to CustomUser due to AUTH_USER_MODEL setting in settings.py
 

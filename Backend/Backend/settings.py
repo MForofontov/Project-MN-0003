@@ -40,14 +40,16 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     
+    # Third-Party Apps
     "rest_framework",
     "rest_framework_simplejwt",
-    
     "corsheaders",
-    
-    "api.apps.ApiConfig",
+
+    # Local Apps
     "users.apps.UsersConfig",
+    "api.apps.ApiConfig",
     "music.apps.MusicConfig",
+    "reports.apps.ReportsConfig",
 ]
 
 MIDDLEWARE = [
