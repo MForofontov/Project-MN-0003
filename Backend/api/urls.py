@@ -15,5 +15,5 @@ urlpatterns = [
     
     path('csrf/', get_csrf_token, name='get-csrf-token'),
     
-    path('upload/', MusicFileUploadView.as_view(), name='file-upload'),
+    path('file-upload/', MusicFileUploadView.as_view(), name='file-upload'),
 ]

@@ -19,10 +19,10 @@ class MusicFileUploadView(APIView):
         # Check if the data is valid
         if serializer.is_valid():
             # Save the valid data to create a new MusicFile instance
-            music_file = serializer.save()
+            music_file = serializer.save(user=request.user)
             
             # Trigger the asynchronous processing task
-            process_file_task.delay(music_file.file.path)
+            #process_file_task.delay(music_file.file.path)
             
             # Return the serialized data and a 201 Created status
             return Response({

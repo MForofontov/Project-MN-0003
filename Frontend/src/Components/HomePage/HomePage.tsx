@@ -1,14 +1,16 @@
 import React from 'react';
 import './HomePage.css';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../utils/AuthContext';
 
 const HomePage: React.FC = () => {
     // const { isAuthenticated, login } = useAuth();
     // const navigate = useNavigate();
-
+    
     // if (isAuthenticated) {
     //     navigate('/profile');
     // }
-
+    
     // if (isAuthenticated === null) {
     //     return <div>Loading...</div>;
     // }

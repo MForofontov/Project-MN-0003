@@ -45,4 +45,4 @@ class MusicFileSerializer(serializers.ModelSerializer):
         # Specify the model to be serialized
         model = MusicFile
         # Specify the fields to be included in the serialization
-        fields = ['user', 'title', 'file']
+        fields = ['title', 'file_path']
