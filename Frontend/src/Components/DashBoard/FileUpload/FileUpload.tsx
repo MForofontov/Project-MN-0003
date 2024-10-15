@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import uploadFile from '../../../services/upload-music';
+import { AxiosResponse } from 'axios';
 import { Button, Typography, Box, Paper, dividerClasses } from '@mui/material';
 import { styled } from '@mui/system';
 
@@ -19,8 +21,17 @@ const FileUpload: React.FC = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (selectedFile) {
+
+      const title = ``;
+
       // Handle file upload logic here
-      console.log('Uploading file:', selectedFile);
+      uploadFile(selectedFile, title)
+        .then((response: AxiosResponse<any>) => {
+          console.log('File uploaded successfully:', response);
+        })
+        .catch((error: any) => {
+          console.error('Failed to upload file:', error);
+        });
     }
   };
 

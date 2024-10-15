@@ -1,3 +1,5 @@
+import os
+from datetime import datetime
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -20,17 +22,23 @@ def user_directory_path(instance: 'MusicFile', filename: str) -> str:
     str
         The generated file path.
     """
-    # file will be uploaded to MEDIA_ROOT/user_<id>/music/<filename>
-    return 'user_{0}/music/{1}'.format(instance.user.id, filename)
+    
+    uploaded_at = instance.uploaded_at.strftime('%Y-%m-%d_%H-%M-%S')
+    name, ext = os.path.splitext(filename)
+    unique_filename = f'{name}_{uploaded_at}.{ext}'
+    # Return the unique file path
+    return f'user_{instance.user.id}/music/{unique_filename}'
+
 
 class MusicFile(models.Model):
     """
     Model representing a music file uploaded by a user.
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='music_files')
-    title = models.CharField(max_length=255)
-    file = models.FileField(upload_to=user_directory_path)
+    file_name = models.CharField(max_length=255, blank=True)
+    title = models.CharField(max_length=255, blank=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    file_path = models.FileField(upload_to=user_directory_path)
 
     def __str__(self) -> str:
         """
