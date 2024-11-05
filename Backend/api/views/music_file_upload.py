@@ -22,7 +22,7 @@ class MusicFileUploadView(APIView):
             music_file = serializer.save(user=request.user)
             
             # Trigger the asynchronous processing task
-            #process_file_task.delay(music_file.file.path)
+            process_file_task.delay(music_file.file.path)
             
             # Return the serialized data and a 201 Created status
             return Response({
