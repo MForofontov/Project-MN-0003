@@ -22,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-ntv9n!g5j$!f3b6+c8*kj2nr8y)f78glzz#o-_$ddyhqum6qge"
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(',')
 
 
 # Application definition
@@ -94,11 +94,11 @@ WSGI_APPLICATION = "Backend.wsgi.application"
 DATABASES = {
        "default": {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'db_dev_mn0003_1',  # Replace with your database name
-        'USER': 'mf',  # Replace with your database user
-        'PASSWORD': 'mf123',  # Replace with your database password
-        'HOST': 'localhost',  # Set to your PostgreSQL server address
-        'PORT': '5432',  # Default PostgreSQL port
+        'NAME': os.getenv('POSTGRES_DB'),  # Replace with your database name
+        'USER': os.getenv('POSTGRES_USER'),  # Replace with your database user
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),  # Replace with your database password
+        'HOST': os.getenv('DB_HOST'),  # Set to your PostgreSQL server address
+        'PORT': os.getenv('DB_PORT'),  # Default PostgreSQL port
     }
 }
 
@@ -146,9 +146,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ORIGIN_ALLOW_ALL = False  # Disable this for better security in production
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # URL of your React development server
-]
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:5173').split(',')  # URL of your React development server
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",  # Your React app URL

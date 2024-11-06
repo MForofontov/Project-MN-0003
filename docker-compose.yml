@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./Frontend
+    container_name: frontend
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./Frontend:/app  # Mount the frontend directory for live code updates
+    command: npm run dev -- --host 0.0.0.0 # Start and expose the Vite development server to network
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./Backend
+    container_name: backend
+    env_file:
+      - .env
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./Backend:/app  # Mount the backend directory for live code updates
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    image: postgres:latest
+    container_name: db
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
