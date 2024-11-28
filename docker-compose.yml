@@ -45,7 +45,7 @@ services:
 
   redis:
     image: redis:latest
-    container_name: redis
+    container_name: redis_mn_003_docker
     ports:
       - '6379:6379'
     networks:
@@ -54,7 +54,7 @@ services:
   celery:
     build:
       context: ./Backend
-    container_name: celery
+    container_name: celery_mn_003_docker
     env_file:
       - .env
     volumes:
@@ -65,7 +65,6 @@ services:
     networks:
       - app-network
     command: celery -A Backend worker --loglevel=info
-
 
 networks:
   app-network:
