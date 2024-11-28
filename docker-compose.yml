@@ -4,27 +4,30 @@ services:
   frontend:
     build:
       context: ./Frontend
-    container_name: frontend
+    container_name: frontend_mn_003_docker
     ports:
       - '5173:5173'
     volumes:
-      - ./Frontend:/app  # Mount the frontend directory for live code updates
+      - ./Frontend:/Frontend_docker  # Mount the frontend directory for live code updates
     command: npm run dev -- --host 0.0.0.0 # Start and expose the Vite development server to network
+    user: "${UID}:${GID}"  # Run as the current user
     networks:
       - app-network
 
   backend:
     build:
       context: ./Backend
-    container_name: backend
+    container_name: backend_mn_003_docker
     env_file:
       - .env
     ports:
       - '8000:8000'
     volumes:
-      - ./Backend:/app  # Mount the backend directory for live code updates
+      - ./Backend:/Backend_docker  # Mount the backend directory for live code updates
+    user: "${UID}:${GID}"  # Run as the current user
     depends_on:
       - db
+      - redis
     networks:
       - app-network
 
@@ -39,6 +42,29 @@ services:
       - '5432:5432'
     networks:
       - app-network
+
+  redis:
+    image: redis:latest
+    container_name: redis_mn_003_docker
+    ports:
+      - '6379:6379'
+    networks:
+      - app-network
+
+  celery:
+    build:
+      context: ./Backend
+    container_name: celery_mn_003_docker
+    env_file:
+      - .env
+    volumes:
+      - ./Backend:/Backend_docker  # Mount the backend directory for live code updates
+    depends_on:
+      - db
+      - redis
+    networks:
+      - app-network
+    command: celery -A Backend worker --loglevel=info
 
 networks:
   app-network:

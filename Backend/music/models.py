@@ -27,7 +27,7 @@ def user_directory_path(instance: 'MusicFile', filename: str) -> str:
     name, ext = os.path.splitext(filename)
     unique_filename = f'{name}_{uploaded_at}.{ext}'
     # Return the unique file path
-    return f'user_{instance.user.id}/music/{unique_filename}'
+    return f'user_{instance.user.id}/{unique_filename}'
 
 
 class MusicFile(models.Model):

@@ -2,7 +2,7 @@
 FROM node:20
 
 # Set the working directory
-WORKDIR /app/frontend
+WORKDIR /Frontend_docker
 
 # Install dependencies
 COPY package.json package-lock.json ./
@@ -12,7 +12,7 @@ RUN npm install
 COPY . .
 
 # Expose port 3000 for Vite's development server
-EXPOSE 3000
+EXPOSE 5173
 
 # Start the Vite development server
 CMD ["npm", "run", "dev"]

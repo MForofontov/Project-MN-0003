@@ -2,7 +2,7 @@
 FROM python:latest
 
 # Set the working directory in the container
-WORKDIR /app/backend
+WORKDIR /Backend_docker
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the current directory contents into the container at /app
+# Copy the current directory contents into the container at /Backend_docker
 COPY . .
 
 # Expose the port the app runs on
@@ -28,6 +28,5 @@ ENV PYTHONUNBUFFERED=1
 RUN apt-get update && apt-get install -y wait-for-it
 
 # Your entrypoint or CMD can use wait-for-it
-CMD ["wait-for-it", "db:5432", "--", "python", "manage.py", "runserver", "0.0.0.0:8000"]
-
+CMD ["sh", "entrypoint.sh"]
 
