@@ -2,7 +2,7 @@
 FROM node:20
 
 # Set the working directory
-WORKDIR /app/frontend
+WORKDIR /Frontend_docker
 
 # Install dependencies
 COPY package.json package-lock.json ./

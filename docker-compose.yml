@@ -8,7 +8,7 @@ services:
     ports:
       - '5173:5173'
     volumes:
-      - ./Frontend:/app  # Mount the frontend directory for live code updates
+      - ./Frontend:/Frontend_docker  # Mount the frontend directory for live code updates
     command: npm run dev -- --host 0.0.0.0 # Start and expose the Vite development server to network
     networks:
       - app-network
@@ -22,7 +22,7 @@ services:
     ports:
       - '8000:8000'
     volumes:
-      - ./Backend:/app  # Mount the backend directory for live code updates
+      - ./Backend:/Backend_docker  # Mount the backend directory for live code updates
     depends_on:
       - db
     networks:
