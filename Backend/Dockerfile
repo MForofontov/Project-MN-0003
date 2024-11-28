@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the current directory contents into the container at /app
+# Copy the current directory contents into the container at /Backend_docker
 COPY . .
 
 # Expose the port the app runs on
@@ -28,5 +28,5 @@ ENV PYTHONUNBUFFERED=1
 RUN apt-get update && apt-get install -y wait-for-it
 
 # Your entrypoint or CMD can use wait-for-it
-CMD ["/entrypoint.sh"]
+CMD ["sh", "entrypoint.sh"]
 
