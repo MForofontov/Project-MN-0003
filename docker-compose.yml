@@ -4,25 +4,27 @@ services:
   frontend:
     build:
       context: ./Frontend
-    container_name: frontend
+    container_name: frontend_mn_003_docker
     ports:
       - '5173:5173'
     volumes:
       - ./Frontend:/Frontend_docker  # Mount the frontend directory for live code updates
     command: npm run dev -- --host 0.0.0.0 # Start and expose the Vite development server to network
+    user: "${UID}:${GID}"  # Run as the current user
     networks:
       - app-network
 
   backend:
     build:
       context: ./Backend
-    container_name: backend
+    container_name: backend_mn_003_docker
     env_file:
       - .env
     ports:
       - '8000:8000'
     volumes:
       - ./Backend:/Backend_docker  # Mount the backend directory for live code updates
+    user: "${UID}:${GID}"  # Run as the current user
     depends_on:
       - db
     networks:
