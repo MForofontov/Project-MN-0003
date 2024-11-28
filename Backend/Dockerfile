@@ -28,5 +28,5 @@ ENV PYTHONUNBUFFERED=1
 RUN apt-get update && apt-get install -y wait-for-it
 
 # Your entrypoint or CMD can use wait-for-it
-CMD ["wait-for-it","db:5432", "--", "sh", "-c", "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+CMD ["/entrypoint.sh"]
 
