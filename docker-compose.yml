@@ -52,6 +52,10 @@ services:
     container_name: db_user_management_service
     env_file:
       - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER_UMS}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_UMS}
+      - POSTGRES_DB=${POSTGRES_DB_UMS}
     volumes:
       - postgres_data_user_management:/var/lib/postgresql/data
     ports:
@@ -64,6 +68,10 @@ services:
     container_name: db_data_processing_service
     env_file:
       - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER_DPS}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_DPS}
+      - POSTGRES_DB=${POSTGRES_DB_DPS}
     volumes:
       - postgres_data_data_processing:/var/lib/postgresql/data
     ports:

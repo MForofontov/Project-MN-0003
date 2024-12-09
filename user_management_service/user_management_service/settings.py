@@ -93,8 +93,8 @@ DATABASES = {
        "default": {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('POSTGRES_DB_UMS'),  # Replace with your database name
-        'USER': os.getenv('POSTGRES_USER'),  # Replace with your database user
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),  # Replace with your database password
+        'USER': os.getenv('POSTGRES_USER_UMS'),  # Replace with your database user
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD_UMS'),  # Replace with your database password
         'HOST': os.getenv('DB_HOST_UMS'),  # Set to your PostgreSQL server address
         'PORT': os.getenv('DB_PORT_UMS'),  # Default PostgreSQL port
     }
@@ -134,6 +134,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
+
+STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
