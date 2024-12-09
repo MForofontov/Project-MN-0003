@@ -8,67 +8,96 @@ services:
     ports:
       - '5173:5173'
     volumes:
-      - ./Frontend:/Frontend_docker  # Mount the frontend directory for live code updates
-    command: npm run dev -- --host 0.0.0.0 # Start and expose the Vite development server to network
-    user: "${UID}:${GID}"  # Run as the current user
+      - ./Frontend:/Frontend_docker
+    command: npm run dev -- --host 0.0.0.0
+    user: "${UID}:${GID}"
     networks:
       - app-network
 
-  backend:
+  user_management_service:
     build:
-      context: ./Backend
-    container_name: backend_mn_003_docker
+      context: ./user_management_service
+    container_name: user_management_service
     env_file:
       - .env
     ports:
       - '8000:8000'
     volumes:
-      - ./Backend:/Backend_docker  # Mount the backend directory for live code updates
-    user: "${UID}:${GID}"  # Run as the current user
+      - ./user_management_service:/user_management_service_docker
+    user: "${UID}:${GID}"
     depends_on:
-      - db
-      - redis
+      - db_user_management_service
     networks:
       - app-network
 
-  db:
+  data_processing_service:
+    build:
+      context: ./data_processing_service
+    container_name: data_processing_service
+    env_file:
+      - .env
+    ports:
+      - '8001:8001'
+    volumes:
+      - ./data_processing_service:/data_processing_service_docker
+    user: "${UID}:${GID}"
+    depends_on:
+      - db_data_processing_service
+      - data_processing_service_redis
+    networks:
+      - app-network
+
+  db_user_management_service:
     image: postgres:latest
-    container_name: db
+    container_name: db_user_management_service
     env_file:
       - .env
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_user_management:/var/lib/postgresql/data
     ports:
       - '5432:5432'
     networks:
       - app-network
+  
+  db_data_processing_service:
+    image: postgres:latest
+    container_name: db_data_processing_service
+    env_file:
+      - .env
+    volumes:
+      - postgres_data_data_processing:/var/lib/postgresql/data
+    ports:
+      - '5433:5433'
+    networks:
+      - app-network
 
-  redis:
+  data_processing_service_redis:
     image: redis:latest
-    container_name: redis_mn_003_docker
+    container_name: data_processing_service_redis
     ports:
       - '6379:6379'
     networks:
       - app-network
 
-  celery:
+  data_processing_service_celery:
     build:
-      context: ./Backend
-    container_name: celery_mn_003_docker
+      context: ./data_processing_service
+    container_name: data_processing_service_celery
     env_file:
       - .env
     volumes:
-      - ./Backend:/Backend_docker  # Mount the backend directory for live code updates
+      - ./data_processing_service:/data_processing_service_docker
     depends_on:
-      - db
-      - redis
+      - db_data_processing_service
+      - data_processing_service_redis
     networks:
       - app-network
     command: celery -A Backend worker --loglevel=info
 
+volumes:
+  postgres_data_user_management:
+  postgres_data_data_processing:
+
 networks:
   app-network:
     driver: bridge
-
-volumes:
-  postgres_data:
