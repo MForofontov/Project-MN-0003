@@ -14,53 +14,81 @@ services:
     networks:
       - app-network
 
-  backend:
+  user_management_service:
     build:
       context: ./Backend
-    container_name: backend_mn_003_docker
+    container_name: user_management_service
     env_file:
       - .env
     ports:
       - '8000:8000'
     volumes:
-      - ./Backend:/Backend_docker  # Mount the backend directory for live code updates
+      - ./user_management_service:/user_management_service_docker  # Mount the backend directory for live code updates
     user: "${UID}:${GID}"  # Run as the current user
     depends_on:
-      - db
+      - db_user_management_service
+    networks:
+      - app-network
+
+  data_processing_service:
+    build:
+      context: ./Backend
+    container_name: data_processing_service
+    env_file:
+      - .env
+    ports:
+      - '8001:8001'
+    volumes:
+      - ./data_processing_service:/data_processing_service_docker  # Mount the backend directory for live code updates
+    user: "${UID}:${GID}"  # Run as the current user
+    depends_on:
+      - db_data_processing_service
       - redis
     networks:
       - app-network
 
-  db:
+  db_user_management_service:
     image: postgres:latest
-    container_name: db
+    container_name: db_user_management_service
     env_file:
       - .env
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - db_user_management_service:/var/lib/postgresql/data
     ports:
       - '5432:5432'
     networks:
       - app-network
+  
+  db_data_processing_service:
+    image: postgres:latest
+    container_name: db_data_processing_service
+    env_file:
+      - .env
+    volumes:
+      - db_data_processing_service:/var/lib/postgresql/data
+    ports:
+      - '5433:5433'
+    networks:
+      - app-network
 
-  redis:
+  data_processing_service_redis:
     image: redis:latest
-    container_name: redis_mn_003_docker
+    container_name: data_processing_service_redis
     ports:
       - '6379:6379'
     networks:
       - app-network
 
-  celery:
+  data_processing_service_celery:
     build:
       context: ./Backend
-    container_name: celery_mn_003_docker
+    container_name: data_processing_service_celery
     env_file:
       - .env
     volumes:
-      - ./Backend:/Backend_docker  # Mount the backend directory for live code updates
+      - ./data_processing_service:/data_processing_service_docker  # Mount the backend directory for live code updates
     depends_on:
-      - db
+      - db_data_processing_service
       - redis
     networks:
       - app-network
