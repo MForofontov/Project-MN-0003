@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Expose the port the app runs on
-EXPOSE 8000
+EXPOSE 8001
 
 # Set environment variables to avoid creating pyc files and keep the terminal unbuffered
 ENV PYTHONDONTWRITEBYTECODE=1
