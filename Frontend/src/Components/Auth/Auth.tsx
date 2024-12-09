@@ -42,16 +42,6 @@ const Auth: React.FC = () => {
     setIsLogin(!isLogin);
   };
 
-  React.useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/dashboard');
-    }
-  }, [isAuthenticated, navigate]);
-
-  if (isAuthenticated === null) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className="auth-container">
       {isLogin ? (
