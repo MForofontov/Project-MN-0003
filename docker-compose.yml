@@ -56,6 +56,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER_UMS}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_UMS}
       - POSTGRES_DB=${POSTGRES_DB_UMS}
+      - PGPORT=${DB_PORT_UMS}
     volumes:
       - postgres_data_user_management:/var/lib/postgresql/data
     ports:
@@ -72,6 +73,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER_DPS}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_DPS}
       - POSTGRES_DB=${POSTGRES_DB_DPS}
+      - PGPORT=${DB_PORT_DPS}
     volumes:
       - postgres_data_data_processing:/var/lib/postgresql/data
     ports:
