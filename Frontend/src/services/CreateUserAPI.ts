@@ -1,16 +1,20 @@
-import { api } from './api';
+import { callUserManagementAPI } from './api'; // Import the callUserManagementAPI function
 
-const CreateUserAPI = async (email: string, password: string) => {
-    try {
-      const response = await api.post('/create/', {
+const createUserAPI = async (email: string, password: string) => {
+  try {
+    const response = await callUserManagementAPI({
+      method: 'post',
+      url: '/create/',
+      data: {
         email,
         password,
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error creating user:', error);
-      throw error;
-    }
-  };
+      },
+    });
+    return response.data; // Return the response data
+  } catch (error) {
+    console.error('Error creating user:', error);
+    throw error; // Throw error if the API call fails
+  }
+};
 
-  export default CreateUserAPI
+export default createUserAPI;

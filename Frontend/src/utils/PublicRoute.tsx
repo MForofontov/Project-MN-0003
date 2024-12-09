@@ -3,13 +3,12 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from './AuthContext'; // Import the useAuth hook
 import CustomSpinner from './CustomSpinner/CustomSpinner'; // Import the CustomSpinner component
 
-interface PrivateRouteProps {
+interface PublicRouteProps {
   component: React.ComponentType<any>;
-  isSidebarVisible: boolean;
   [key: string]: any; // Allow additional props
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, isSidebarVisible, ...props }) => {
+const PublicRoute: React.FC<PublicRouteProps> = ({ component: Component, ...props }) => {
   const { isAuthenticated } = useAuth(); // Get the authentication status from the AuthContext
 
   if (isAuthenticated === null) {
@@ -21,11 +20,11 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, isSid
     );
   }
 
-  return isAuthenticated ? (
-    <Component {...props} isSidebarVisible={isSidebarVisible} /> // Render the component if authenticated
+  return !isAuthenticated ? (
+    <Component {...props} /> // Render the component if not authenticated
   ) : (
-    <Navigate to="/login" /> // Redirect to login if not authenticated
+    <Navigate to="/dashboard" /> // Redirect to dashboard if authenticated
   );
 };
 
-export default PrivateRoute;
+export default PublicRoute;

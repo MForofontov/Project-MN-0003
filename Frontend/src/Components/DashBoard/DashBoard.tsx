@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { api } from '../../services/api';
+import { callUserManagementAPI } from '../../services/api';
 import SideBar from '../SideBar/SideBar';
 import FileUpload from './FileUpload/FileUpload';
 import './DashBoard.css';
@@ -25,7 +25,10 @@ const Dashboard: React.FC<DashBoardProps> = ({isSidebarVisible}) => {
 
     const fetchUserProfile = async (): Promise<User> => {
       try {
-        const response = await api.get('/profile/');
+        const response = await callUserManagementAPI({
+          method: 'get',
+          url: '/profile/',
+        });
         setUser(response.data);
         return response.data; // Ensure the function returns the fetched user data
       } catch (error) {
