@@ -2,7 +2,7 @@ from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from api.serializers import CustomTokenObtainPairSerializer
+from users.serializers import CustomTokenObtainPairSerializer
 
 # Custom view to refresh JWT tokens using a refresh token stored in cookies
 class CustomTokenRefreshView(TokenRefreshView):

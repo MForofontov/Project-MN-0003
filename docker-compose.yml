@@ -81,7 +81,7 @@ services:
 
   data_processing_service_celery:
     build:
-      context: ./Backend
+      context: ./data_processing_service
     container_name: data_processing_service_celery
     env_file:
       - .env
