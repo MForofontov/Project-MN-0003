@@ -1,15 +1,15 @@
-import { callAPI } from './api';
+import { callUserManagementAPI } from './api'; // Import the callUserManagementAPI function
 
-export const LogOutAPI = async () => {
-    try {
-        await callAPI({
-            method: 'POST',
-            url: '/logout/',
-        });
-    } catch (error) {
-        console.error('Error logging out:', error);
-        throw error;
-    }
+const logOutAPI = async () => {
+  try {
+    await callUserManagementAPI({
+      method: 'post', // Use lowercase for the HTTP method
+      url: '/logout/',
+    });
+  } catch (error) {
+    console.error('Error logging out:', error);
+    throw error; // Throw error if the API call fails
+  }
 };
 
-export default LogOutAPI;
+export default logOutAPI;

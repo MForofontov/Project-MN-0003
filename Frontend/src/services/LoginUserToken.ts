@@ -1,16 +1,20 @@
-import { api } from "./api";
+import { callUserManagementAPI } from './api'; // Import the callUserManagementAPI function
 
-const LoginUserToken = async (email: string, password: string) => {
-    try {
-      const response = await api.post("/token/", {
+const loginUserToken = async (email: string, password: string) => {
+  try {
+    const response = await callUserManagementAPI({
+      method: 'post',
+      url: '/token/',
+      data: {
         email,
         password,
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Error logging in user:", error);
-      throw error;
-    }
-  };
+      },
+    });
+    return response.data; // Return the response data
+  } catch (error) {
+    console.error('Error logging in user:', error);
+    throw error; // Throw error if the API call fails
+  }
+};
 
-export default LoginUserToken;
+export default loginUserToken;

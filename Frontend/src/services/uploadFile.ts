@@ -1,4 +1,4 @@
-import { callAPI } from './api';
+import { callDataProcessingAPI } from './api';
 import { AxiosResponse } from 'axios';
 
 /**
@@ -14,7 +14,7 @@ async function uploadFile(file: File, title: string): Promise<AxiosResponse<any>
     formData.append('title', title);
 
     // Send the request to the server
-    const response = await callAPI({
+    const response = await callDataProcessingAPI({
         method: 'POST',
         url: '/file-upload/',
         data: formData,

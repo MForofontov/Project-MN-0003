@@ -21,22 +21,23 @@ const dataProcessingApi: AxiosInstance = axios.create({
 });
 
 let isRefreshing = false; // Flag to indicate if the token is being refreshed
-let refreshSubscribers: ((token: string) => void)[] = []; // Array to hold subscribers waiting for token refresh
+let refreshSubscribers: (() => void)[] = []; // Array to hold subscribers waiting for token refresh
 
-// Function to call all subscribers with the new token
-const onRefreshed = (token: string) => {
-  refreshSubscribers.map((callback) => callback(token));
+// Function to call all subscribers
+const onRefreshed = () => {
+  refreshSubscribers.forEach((callback) => callback());
 };
 
 // Function to add a subscriber to the array
-const addRefreshSubscriber = (callback: (token: string) => void) => {
+const addRefreshSubscriber = (callback: () => void) => {
   refreshSubscribers.push(callback);
 };
 
 // Function to refresh the token
 const refreshToken = async (): Promise<void> => {
   try {
-    await userManagementApi.post('token/refresh/', {}); // Make a request to refresh the token
+    await userManagementApi.post('/token/refresh/', {}); // Make a request to refresh the token
+    onRefreshed(); // Notify all subscribers
   } catch (error) {
     console.error('Error refreshing token:', error);
     throw error; // Throw error if token refresh fails
@@ -45,9 +46,7 @@ const refreshToken = async (): Promise<void> => {
 
 // Add a response interceptor to handle token expiration for user management API
 userManagementApi.interceptors.response.use(
-  (response) => {
-    return response; // Return the response if no error
-  },
+  (response) => response, // Return the response if no error
   async (error) => {
     const originalRequest = error.config; // Get the original request
     if (error.response.status === 401 && !originalRequest._retry) { // Check if the error is due to an expired token
@@ -56,7 +55,6 @@ userManagementApi.interceptors.response.use(
         try {
           await refreshToken(); // Refresh the token
           isRefreshing = false; // Reset the flag
-          onRefreshed(''); // Call all subscribers with the new token
           refreshSubscribers = []; // Clear the subscribers array
         } catch (refreshError) {
           isRefreshing = false; // Reset the flag if token refresh fails
@@ -70,6 +68,39 @@ userManagementApi.interceptors.response.use(
       const retryOriginalRequest = new Promise<AxiosResponse>((resolve) => {
         addRefreshSubscriber(() => {
           resolve(userManagementApi(originalRequest)); // Retry the original request once the token is refreshed
+        });
+      });
+
+      return retryOriginalRequest; // Return the promise to retry the original request
+    }
+    return Promise.reject(error); // Reject the promise with the original error
+  }
+);
+
+// Add a response interceptor to handle token expiration for data processing API
+dataProcessingApi.interceptors.response.use(
+  (response) => response, // Return the response if no error
+  async (error) => {
+    const originalRequest = error.config; // Get the original request
+    if (error.response.status === 401 && !originalRequest._retry) { // Check if the error is due to an expired token
+      if (!isRefreshing) { // If not already refreshing the token
+        isRefreshing = true; // Set the flag to indicate token refresh is in progress
+        try {
+          await refreshToken(); // Refresh the token
+          isRefreshing = false; // Reset the flag
+          refreshSubscribers = []; // Clear the subscribers array
+        } catch (refreshError) {
+          isRefreshing = false; // Reset the flag if token refresh fails
+          console.error('Token refresh failed:', refreshError);
+          // Optionally, handle logout or redirect to login page
+          return Promise.reject(refreshError); // Reject the promise with the refresh error
+        }
+      }
+
+      // Create a promise to retry the original request
+      const retryOriginalRequest = new Promise<AxiosResponse>((resolve) => {
+        addRefreshSubscriber(() => {
+          resolve(dataProcessingApi(originalRequest)); // Retry the original request once the token is refreshed
         });
       });
 
