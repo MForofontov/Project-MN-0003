@@ -53,7 +53,7 @@ services:
     env_file:
       - .env
     volumes:
-      - db_user_management_service:/var/lib/postgresql/data
+      - postgres_data_user_management:/var/lib/postgresql/data
     ports:
       - '5432:5432'
     networks:
@@ -65,7 +65,7 @@ services:
     env_file:
       - .env
     volumes:
-      - db_data_processing_service:/var/lib/postgresql/data
+      - postgres_data_data_processing:/var/lib/postgresql/data
     ports:
       - '5433:5433'
     networks:
