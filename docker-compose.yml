@@ -16,7 +16,7 @@ services:
 
   user_management_service:
     build:
-      context: ./Backend
+      context: ./user_management_service
     container_name: user_management_service
     env_file:
       - .env
@@ -32,7 +32,7 @@ services:
 
   data_processing_service:
     build:
-      context: ./Backend
+      context: ./data_processing_service
     container_name: data_processing_service
     env_file:
       - .env
