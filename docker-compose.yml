@@ -89,7 +89,7 @@ services:
       - ./data_processing_service:/data_processing_service_docker  # Mount the backend directory for live code updates
     depends_on:
       - db_data_processing_service
-      - redis
+      - data_processing_service_redis
     networks:
       - app-network
     command: celery -A Backend worker --loglevel=info
