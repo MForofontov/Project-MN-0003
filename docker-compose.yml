@@ -99,4 +99,5 @@ networks:
     driver: bridge
 
 volumes:
-  postgres_data:
+  postgres_data_user_management:
+  postgres_data_data_processing:
