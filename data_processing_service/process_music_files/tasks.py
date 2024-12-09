@@ -1,8 +1,7 @@
 from celery import shared_task
 import time  # Example for simulating a long process
 from django.db import transaction
-from reports.models import Report
-from music.models import MusicFile
+from process_music_files.models import MusicFile
 
 @shared_task
 def process_file_task(file_path: str) -> None:
@@ -33,18 +32,5 @@ def process_file_task(file_path: str) -> None:
     except MusicFile.DoesNotExist:
         print(f"MusicFile with path {file_path} does not exist.")
         return
-
-    # Generate the report content
-    report_content = f"Analysis of {music_file.title} ran sucessfuly\n"
-    
-    # Create a new Report instance and save the report file
-    with transaction.atomic():
-        report = Report(
-            user=music_file.user,
-            music_file=music_file,
-            result=report_content,
-            title=f"Report for {music_file.title}"
-        )
-        report.save()
 
     print(f"Report generated and saved for file: {file_path}")
