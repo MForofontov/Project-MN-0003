@@ -2,7 +2,7 @@
 FROM python:latest
 
 # Set the working directory in the container
-WORKDIR /Backend_docker
+WORKDIR /user_management_service_docker
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
