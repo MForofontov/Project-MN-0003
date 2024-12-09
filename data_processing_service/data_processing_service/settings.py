@@ -46,10 +46,8 @@ INSTALLED_APPS = [
     "corsheaders",
 
     # Local Apps
-    "users.apps.UsersConfig",
     "api.apps.ApiConfig",
-    "music.apps.MusicConfig",
-    "reports.apps.ReportsConfig",
+    "process_music_files.apps.ProcessMusicFilesConfig",
 ]
 
 MIDDLEWARE = [

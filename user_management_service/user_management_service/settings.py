@@ -48,8 +48,6 @@ INSTALLED_APPS = [
     # Local Apps
     "users.apps.UsersConfig",
     "api.apps.ApiConfig",
-    "music.apps.MusicConfig",
-    "reports.apps.ReportsConfig",
 ]
 
 MIDDLEWARE = [
