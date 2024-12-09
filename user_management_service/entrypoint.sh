@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Wait for the database to be ready
-/wait-for-it.sh db:5432 --timeout=60 --strict -- echo "Database is up"
+/wait-for-it.sh db_user_management_service:5432 --timeout=60 --strict -- echo "Database is up"
 
 # Run migrations
 python manage.py makemigrations

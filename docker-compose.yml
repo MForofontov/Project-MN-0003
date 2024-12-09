@@ -8,9 +8,9 @@ services:
     ports:
       - '5173:5173'
     volumes:
-      - ./Frontend:/Frontend_docker  # Mount the frontend directory for live code updates
-    command: npm run dev -- --host 0.0.0.0 # Start and expose the Vite development server to network
-    user: "${UID}:${GID}"  # Run as the current user
+      - ./Frontend:/Frontend_docker
+    command: npm run dev -- --host 0.0.0.0
+    user: "${UID}:${GID}"
     networks:
       - app-network
 
@@ -23,8 +23,8 @@ services:
     ports:
       - '8000:8000'
     volumes:
-      - ./user_management_service:/user_management_service_docker  # Mount the backend directory for live code updates
-    user: "${UID}:${GID}"  # Run as the current user
+      - ./user_management_service:/user_management_service_docker
+    user: "${UID}:${GID}"
     depends_on:
       - db_user_management_service
     networks:
@@ -39,8 +39,8 @@ services:
     ports:
       - '8001:8001'
     volumes:
-      - ./data_processing_service:/data_processing_service_docker  # Mount the backend directory for live code updates
-    user: "${UID}:${GID}"  # Run as the current user
+      - ./data_processing_service:/data_processing_service_docker
+    user: "${UID}:${GID}"
     depends_on:
       - db_data_processing_service
       - data_processing_service_redis
@@ -86,7 +86,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./data_processing_service:/data_processing_service_docker  # Mount the backend directory for live code updates
+      - ./data_processing_service:/data_processing_service_docker
     depends_on:
       - db_data_processing_service
       - data_processing_service_redis
@@ -94,10 +94,10 @@ services:
       - app-network
     command: celery -A Backend worker --loglevel=info
 
-networks:
-  app-network:
-    driver: bridge
-
 volumes:
   postgres_data_user_management:
   postgres_data_data_processing:
+
+networks:
+  app-network:
+    driver: bridge
