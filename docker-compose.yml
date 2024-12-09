@@ -43,7 +43,7 @@ services:
     user: "${UID}:${GID}"  # Run as the current user
     depends_on:
       - db_data_processing_service
-      - redis
+      - data_processing_service_redis
     networks:
       - app-network
 
