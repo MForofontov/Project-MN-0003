@@ -1,7 +1,7 @@
 // src/components/Header/Header.tsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../utils/AuthContext';
+import { useAuth } from '../../utils/Contexts/AuthContext';
 import SidebarToggleButton from './SideBarToggleButton/SideBarToggleButton';
 import Logo from './Logo/Logo';
 import Nav from './Nav/Nav';

@@ -1,4 +1,4 @@
-// src/components/CustomSpinner/CustomSpinner.tsx
+// src/Components/CustomSpinner/CustomSpinner.tsx
 import React from 'react';
 import './CustomSpinner.css'; // Import custom CSS for the spinner
 
