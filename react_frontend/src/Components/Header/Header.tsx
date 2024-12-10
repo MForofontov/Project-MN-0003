@@ -14,19 +14,8 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
     const navigate = useNavigate();
-    const { isAuthenticated, logout } = useAuth();
-    const [isLoading, setIsLoading] = useState(true); // State to manage loading status
+    const { isAuthenticated, isloading, logout } = useAuth();
 
-    useEffect(() => {
-      // Simulate an async authentication check
-      const checkAuth = async () => {
-        // Simulate a delay for the authentication check
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setIsLoading(false); // Set loading to false after the check
-      };
-
-      checkAuth();
-    }, []);
     const handleLogout = async () => {
       // Add your logout logic here
       await logout();
@@ -40,12 +29,14 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
     return (
       <header className="header">
       {isAuthenticated ? (
+        <div className="header-left">
         <SidebarToggleButton toggleSidebar={toggleSidebar} />
+        <Logo /> {/* Render the Logo component */}
+        </div>
       ) : (
-        <div style={{ width: '40px', height: '40px' }}></div> // Render an empty div with the same dimensions as the SidebarToggleButton
-      )}
         <Logo />
-        {isLoading ? (
+      )}
+        {isloading ? (
           <SkeletonLoader />
         ) : (
         <Nav isAuthenticated={isAuthenticated} handleNavigation={handleNavigation} handleLogout={handleLogout} />
