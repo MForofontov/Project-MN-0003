@@ -8,7 +8,7 @@ services:
     ports:
       - "80:80" # Map port 80 of the host to port 80 of the container
     depends_on:
-      - frontend # Ensure the frontend service starts before this service
+      - react_frontend # Ensure the frontend service starts before this service
       - user_management_service # Ensure the user_management_service starts before this service
       - data_processing_service # Ensure the data_processing_service starts before this service
     volumes:
