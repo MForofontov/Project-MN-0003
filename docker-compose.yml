@@ -7,6 +7,10 @@ services:
     container_name: nginx # Name the container
     ports:
       - "80:80" # Map port 80 of the host to port 80 of the container
+    depends_on:
+      - frontend # Ensure the frontend service starts before this service
+      - user_management_service # Ensure the user_management_service starts before this service
+      - data_processing_service # Ensure the data_processing_service starts before this service
     volumes:
       - ./vite-app/dist:/usr/share/nginx/html # Mount the built app directory to the NGINX root directory
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf # Mount custom NGINX config file
@@ -14,7 +18,7 @@ services:
     networks:
       - app-network # Connect to the app-network
 
-  frontend:
+  react_frontend:
     build:
       context: ./react_frontend # Build the frontend from the react_frontend directory
     container_name: react_frontend # Name the container
