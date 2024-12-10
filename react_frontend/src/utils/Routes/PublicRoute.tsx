@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../Contexts/AuthContext'; // Import the useAuth hook
-import CustomSpinner from '../Components/CustomSpinner/CustomSpinner'; // Import the CustomSpinner component
+import Loading from '../Components/Loading/Loading'; // Import the CustomSpinner component
 
 interface PublicRouteProps {
   component: React.ComponentType<any>;
@@ -15,7 +15,7 @@ const PublicRoute: React.FC<PublicRouteProps> = ({ component: Component, ...prop
     // Return a loading spinner while checking authentication status
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
-        <CustomSpinner />
+        <Loading />
       </div>
     );
   }
