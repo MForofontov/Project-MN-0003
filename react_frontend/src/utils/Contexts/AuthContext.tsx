@@ -7,6 +7,7 @@ import LoginUserToken from '../../services/loginUserToken'; // API to log in
 interface AuthContextProps {
   isAuthenticated: boolean | null;
   isloading: boolean;
+  setIsAuthenticated: (value: boolean | null) => void;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -64,6 +65,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value = useMemo(
     () => ({
       isAuthenticated,
+      setIsAuthenticated,
       isloading,
       login,
       logout,
