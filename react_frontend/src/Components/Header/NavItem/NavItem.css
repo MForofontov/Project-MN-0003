@@ -23,3 +23,10 @@
   .logout-button:hover, .login-button:hover {
     background-color: #555;
   }
+
+/* Media queries for dynamic behavior */
+@media (max-width: 600px) {
+  .list-button {
+    display: none; /* Hide the navigation buttons on smaller screens */
+  }
+}

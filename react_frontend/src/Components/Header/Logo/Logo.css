@@ -12,3 +12,10 @@
   max-width: 100%;
   height: auto;
 }
+
+/* Media queries for dynamic behavior */
+@media (max-width: 600px) {
+  .logo {
+    display: none; /* Hide the logo on smaller screens */
+  }
+}

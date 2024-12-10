@@ -4,11 +4,6 @@
     overflow: hidden;
   }
   
-  .sidebar-visible .dashboard-main {
-    margin-left: 250px; /* Adjust based on sidebar width */
-    width: calc(100% - 290px); /* Adjust width to prevent overflow (250px + all subdivisions) */
-  }
-  
   .dashboard-main {
     flex: 1;
     display: flex;
@@ -94,3 +89,20 @@
   .dashboard-button:hover {
     background-color: #0056b3;
   }
+
+
+/* Media queries for dynamic behavior */
+/* For Large Screens */
+@media (min-width: 1024px) {
+  .sidebar-visible .dashboard-main {
+    margin-left: 250px; /* Adjust based on sidebar width */
+    width: calc(100% - 290px); /* Adjust width to prevent overflow (250px + all subdivisions) */
+  }
+}
+/* For Small and medium Screens */
+@media (max-width: 1024px) {
+  .sidebar-visible .dashboard-main {
+    margin-top: 250px; /* Adjust based on sidebar height */
+    width: 100%; /* Full width */
+  }
+}

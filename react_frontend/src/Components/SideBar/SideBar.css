@@ -19,3 +19,18 @@
   color: white;
   text-align: center;
 }
+
+/* Media queries for dynamic behavior */
+@media (max-width: 1024px) {
+  .sidebar {
+    top: -100%; /* Initial position off-screen above */
+    left: 0; /* Reset left position */
+    width: 100%; /* Full width */
+    height: auto; /* Auto height */
+    transition: top 0.3s ease; /* Smooth transition for sliding down */
+  }
+
+  .sidebar.visible {
+    top: 0; /* Slide down the sidebar */
+  }
+}
