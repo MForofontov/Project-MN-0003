@@ -1,14 +1,25 @@
 version: '3.8'
 
 services:
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_vite_app
+    ports:
+      - "80:80" # Map port 80 of the host to port 80 of the container
+    volumes:
+      - ./vite-app/dist:/usr/share/nginx/html # Mount the built app
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf # Mount custom Nginx config
+    restart: always # Restart service always
+
   frontend:
     build:
-      context: ./Frontend
-    container_name: frontend_mn_003_docker
+      context: ./react_frontend
+    container_name: react_frontend
     ports:
       - '5173:5173'
     volumes:
-      - ./Frontend:/Frontend_docker
+      - ./Frontend:/react_frontend_docker
     command: npm run dev -- --host 0.0.0.0
     user: "${UID}:${GID}"
     networks:
