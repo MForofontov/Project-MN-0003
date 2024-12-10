@@ -14,7 +14,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
     const navigate = useNavigate();
-    const { isAuthenticated, isloading, logout } = useAuth();
+    const { isAuthenticated, isLoading, logout } = useAuth();
 
     const handleLogout = async () => {
       // Add your logout logic here
@@ -36,7 +36,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
       ) : (
         <Logo />
       )}
-        {isloading ? (
+        {isLoading ? (
           <SkeletonLoader />
         ) : (
         <Nav isAuthenticated={isAuthenticated} handleNavigation={handleNavigation} handleLogout={handleLogout} />

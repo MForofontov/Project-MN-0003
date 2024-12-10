@@ -10,9 +10,9 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, isSidebarVisible, ...props }) => {
-  const { isAuthenticated } = useAuth(); // Get the authentication status from the AuthContext
+  const { isAuthenticated, isLoading } = useAuth(); // Get the authentication status from the AuthContext
 
-  if (isAuthenticated === null) {
+  if (isLoading) {
     // Return a loading spinner while checking authentication status
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
@@ -24,7 +24,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, isSid
   return isAuthenticated ? (
     <Component {...props} isSidebarVisible={isSidebarVisible} /> // Render the component if authenticated
   ) : (
-    <Navigate to="/login" /> // Redirect to login if not authenticated
+    <Navigate to="/authentication" /> // Redirect to login if not authenticated
   );
 };
 

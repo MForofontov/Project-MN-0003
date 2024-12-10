@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect, useMemo } from 'react';
+import { createContext, useState, useContext, ReactNode, useEffect, useMemo } from 'react';
 import { isAuthenticatedAPI } from '../../services/auth'; // API to check authentication status
 import LogOutAPI from '../../services/logOutAPI'; // API to log out
 import LoginUserToken from '../../services/loginUserToken'; // API to log in
@@ -6,7 +6,8 @@ import LoginUserToken from '../../services/loginUserToken'; // API to log in
 // Define the shape of the context's value
 interface AuthContextProps {
   isAuthenticated: boolean | null;
-  isloading: boolean;
+  isLoading: boolean;
+  setIsAuthenticated: (value: boolean | null) => void;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -17,7 +18,7 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 // Provider component
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null); // Authentication status
-  const [isloading, setLoading] = useState(true); // Loading state
+  const [isLoading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -64,11 +65,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value = useMemo(
     () => ({
       isAuthenticated,
-      isloading,
+      isLoading,
+      setIsAuthenticated,
       login,
       logout,
     }),
-    [isAuthenticated, isloading]
+    [isAuthenticated, isLoading]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
