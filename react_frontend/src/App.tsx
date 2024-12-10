@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { AuthProvider } from './utils/Contexts/AuthContext'; // Import the AuthProvider
 import Header from './Components/Header/Header'; // Import the Header component
 import Footer from './Components/Footer/Footer'; // Import the Footer component
@@ -36,7 +36,8 @@ const AppContent: React.FC = () => {
         <Route path="/authentication" element={<PublicRoute component={Auth} />} /> {/* Add a login route with a public route wrapper */}
         <Route path="/dashboard" element={<PrivateRoute component={DashBoard} isSidebarVisible={isSidebarVisible} />} /> {/* Add a dashboard route with a private route wrapper */}
         {/* Add more routes as needed */}
-        <Route path="*" element={<NotFound />} /> {/* Catch-all route for undefined paths */}
+        <Route path="/404" element={<NotFound />} /> {/* Route for the NotFound component */}
+        <Route path="*" element={<Navigate to="/404" />} /> {/* Redirect to /404 for undefined paths */}
       </Routes>
       <Footer /> {/* Render the Footer component */}
     </>

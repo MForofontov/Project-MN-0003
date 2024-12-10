@@ -1,19 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './HomePage.css';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../utils/Contexts/AuthContext';
+import Loading from '../../utils/Components/Loading/Loading';
 
 const HomePage: React.FC = () => {
-    // const { isAuthenticated, login } = useAuth();
-    // const navigate = useNavigate();
-    
-    // if (isAuthenticated) {
-    //     navigate('/profile');
-    // }
-    
-    // if (isAuthenticated === null) {
-    //     return <div>Loading...</div>;
-    // }
+    const { isAuthenticated } = useAuth(); // Get the authentication status from the context
+    const [isLoading, setIsLoading] = useState(true); // State to manage loading status
+  
+    useEffect(() => {
+      // Simulate an async authentication check
+      const checkAuth = async () => {
+        // Simulate a delay for the authentication check
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        setIsLoading(false); // Set loading to false after the check
+      };
+  
+      checkAuth();
+    }, []);
+  
+    if (isLoading) {
+      return <Loading />; // Show a loading indicator while checking authentication
+    }
+  
+    if (isAuthenticated) {
+      return <Navigate to="/dashboard" />; // Redirect to the dashboard if the user is authenticated
+    }
 
     return (
         <div className="home-page">
