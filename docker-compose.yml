@@ -106,6 +106,10 @@ services:
     networks:
       - app-network # Connect to the app-network
 
+volumes:
+  postgres_data_user_management: # Define the volume for the user management PostgreSQL data
+  postgres_data_data_processing: # Define the volume for the data processing PostgreSQL data
+
 networks:
   app-network:
     driver: bridge # Use the bridge network driver
