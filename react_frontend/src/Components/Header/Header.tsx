@@ -39,7 +39,11 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
   
     return (
       <header className="header">
-        {isAuthenticated && <SidebarToggleButton toggleSidebar={toggleSidebar} />}
+      {isAuthenticated ? (
+        <SidebarToggleButton toggleSidebar={toggleSidebar} />
+      ) : (
+        <div style={{ width: '40px', height: '40px' }}></div> // Render an empty div with the same dimensions as the SidebarToggleButton
+      )}
         <Logo />
         {isLoading ? (
           <SkeletonLoader />
