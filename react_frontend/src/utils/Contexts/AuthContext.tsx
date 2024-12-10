@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect, useMemo } from 'react';
+import { createContext, useState, useContext, ReactNode, useEffect, useMemo } from 'react';
 import { isAuthenticatedAPI } from '../../services/auth'; // API to check authentication status
 import LogOutAPI from '../../services/logOutAPI'; // API to log out
 import LoginUserToken from '../../services/loginUserToken'; // API to log in
@@ -65,8 +65,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value = useMemo(
     () => ({
       isAuthenticated,
-      setIsAuthenticated,
       isloading,
+      setIsAuthenticated,
       login,
       logout,
     }),
