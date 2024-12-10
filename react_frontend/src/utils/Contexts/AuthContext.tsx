@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const checkAuth = async () => {
       try {
         const authStatus = await isAuthenticatedAPI(); // Call API to check auth status
+        console.log('loading component authStatus:', authStatus);
         setIsAuthenticated(authStatus);
       } catch (error) {
         console.error('Error checking authentication status:', error);
@@ -40,6 +41,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       await LoginUserToken(email, password); // Perform login
       setIsAuthenticated(true); // Update status on success
+      console.log('logged in authstatus:', isAuthenticated);
     } catch (error) {
       console.error('Error logging in:', error);
       setIsAuthenticated(false); // Update status on failure
@@ -52,6 +54,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       await LogOutAPI(); // Perform logout
       setIsAuthenticated(false); // Update status
+      console.log('logged out authstatus:', isAuthenticated);
     } catch (error) {
       console.error('Error logging out:', error);
     }

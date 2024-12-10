@@ -1,5 +1,5 @@
 // src/components/Header/Header.tsx
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../utils/Contexts/AuthContext';
 import SidebarToggleButton from './SideBarToggleButton/SideBarToggleButton';
