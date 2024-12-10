@@ -3,122 +3,105 @@ version: '3.8'
 services:
 
   nginx:
-    image: nginx:latest
-    container_name: nginx_vite_app
+    image: nginx:latest # Use the latest NGINX image
+    container_name: nginx # Name the container
     ports:
       - "80:80" # Map port 80 of the host to port 80 of the container
     volumes:
-      - ./vite-app/dist:/usr/share/nginx/html # Mount the built app
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf # Mount custom Nginx config
-    restart: always # Restart service always
+      - ./vite-app/dist:/usr/share/nginx/html # Mount the built app directory to the NGINX root directory
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf # Mount custom NGINX config file
+    restart: always # Always restart the NGINX container if it stops
+    networks:
+      - app-network # Connect to the app-network
 
   frontend:
     build:
-      context: ./react_frontend
-    container_name: react_frontend
+      context: ./react_frontend # Build the frontend from the react_frontend directory
+    container_name: react_frontend # Name the container
     ports:
-      - '5173:5173'
+      - '5173:5173' # Map port 5173 of the host to port 5173 of the container (Vite dev server)
     volumes:
-      - ./Frontend:/react_frontend_docker
-    command: npm run dev -- --host 0.0.0.0
-    user: "${UID}:${GID}"
+      - ./Frontend:/react_frontend_docker # Mount the frontend source code directory
+    command: npm run dev -- --host 0.0.0.0 # Run the Vite dev server
+    user: "${UID}:${GID}" # Use the specified user and group IDs
     networks:
-      - app-network
+      - app-network # Connect to the app-network
 
   user_management_service:
     build:
-      context: ./user_management_service
-    container_name: user_management_service
+      context: ./user_management_service # Build the user management service from the user_management_service directory
+    container_name: user_management_service # Name the container
     env_file:
-      - .env
+      - .env # Use the environment variables from the .env file
     ports:
-      - '8000:8000'
+      - '8000:8000' # Map port 8000 of the host to port 8000 of the container
     volumes:
-      - ./user_management_service:/user_management_service_docker
-    user: "${UID}:${GID}"
+      - ./user_management_service:/user_management_service_docker # Mount the user management service source code directory
+    user: "${UID}:${GID}" # Use the specified user and group IDs
     depends_on:
-      - db_user_management_service
+      - db_user_management_service # Ensure the db_user_management_service starts before this service
     networks:
-      - app-network
+      - app-network # Connect to the app-network
 
   data_processing_service:
     build:
-      context: ./data_processing_service
-    container_name: data_processing_service
+      context: ./data_processing_service # Build the data processing service from the data_processing_service directory
+    container_name: data_processing_service # Name the container
     env_file:
-      - .env
+      - .env # Use the environment variables from the .env file
     ports:
-      - '8001:8001'
+      - '8001:8001' # Map port 8001 of the host to port 8001 of the container
     volumes:
-      - ./data_processing_service:/data_processing_service_docker
-    user: "${UID}:${GID}"
+      - ./data_processing_service:/data_processing_service_docker # Mount the data processing service source code directory
+    user: "${UID}:${GID}" # Use the specified user and group IDs
     depends_on:
-      - db_data_processing_service
-      - data_processing_service_redis
+      - db_data_processing_service # Ensure the db_data_processing_service starts before this service
+      - data_processing_service_redis # Ensure the data_processing_service_redis starts before this service
     networks:
-      - app-network
+      - app-network # Connect to the app-network
 
   db_user_management_service:
-    image: postgres:latest
-    container_name: db_user_management_service
+    image: postgres:latest # Use the latest PostgreSQL image
+    container_name: db_user_management_service # Name the container
     env_file:
-      - .env
+      - .env # Use the environment variables from the .env file
     environment:
-      - POSTGRES_USER=${POSTGRES_USER_UMS}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_UMS}
-      - POSTGRES_DB=${POSTGRES_DB_UMS}
-      - PGPORT=${DB_PORT_UMS}
+      - POSTGRES_USER=${POSTGRES_USER_UMS} # Set the PostgreSQL user from the environment variable
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_UMS} # Set the PostgreSQL password from the environment variable
+      - POSTGRES_DB=${POSTGRES_DB_UMS} # Set the PostgreSQL database name from the environment variable
+      - PGPORT=${DB_PORT_UMS} # Set the PostgreSQL port from the environment variable
     volumes:
-      - postgres_data_user_management:/var/lib/postgresql/data
+      - postgres_data_user_management:/var/lib/postgresql/data # Mount the PostgreSQL data directory
     ports:
-      - '5432:5432'
+      - '5432:5432' # Map port 5432 of the host to port 5432 of the container
     networks:
-      - app-network
-  
+      - app-network # Connect to the app-network
+
   db_data_processing_service:
-    image: postgres:latest
-    container_name: db_data_processing_service
+    image: postgres:latest # Use the latest PostgreSQL image
+    container_name: db_data_processing_service # Name the container
     env_file:
-      - .env
+      - .env # Use the environment variables from the .env file
     environment:
-      - POSTGRES_USER=${POSTGRES_USER_DPS}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_DPS}
-      - POSTGRES_DB=${POSTGRES_DB_DPS}
-      - PGPORT=${DB_PORT_DPS}
+      - POSTGRES_USER=${POSTGRES_USER_DPS} # Set the PostgreSQL user from the environment variable
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_DPS} # Set the PostgreSQL password from the environment variable
+      - POSTGRES_DB=${POSTGRES_DB_DPS} # Set the PostgreSQL database name from the environment variable
+      - PGPORT=${DB_PORT_DPS} # Set the PostgreSQL port from the environment variable
     volumes:
-      - postgres_data_data_processing:/var/lib/postgresql/data
+      - postgres_data_data_processing:/var/lib/postgresql/data # Mount the PostgreSQL data directory
     ports:
-      - '5433:5433'
+      - '5433:5433' # Map port 5433 of the host to port 5433 of the container
     networks:
-      - app-network
+      - app-network # Connect to the app-network
 
   data_processing_service_redis:
-    image: redis:latest
-    container_name: data_processing_service_redis
+    image: redis:latest # Use the latest Redis image
+    container_name: data_processing_service_redis # Name the container
     ports:
-      - '6379:6379'
+      - '6379:6379' # Map port 6379 of the host to port 6379 of the container
     networks:
-      - app-network
-
-  data_processing_service_celery:
-    build:
-      context: ./data_processing_service
-    container_name: data_processing_service_celery
-    env_file:
-      - .env
-    volumes:
-      - ./data_processing_service:/data_processing_service_docker
-    depends_on:
-      - db_data_processing_service
-      - data_processing_service_redis
-    networks:
-      - app-network
-    command: celery -A Backend worker --loglevel=info
-
-volumes:
-  postgres_data_user_management:
-  postgres_data_data_processing:
+      - app-network # Connect to the app-network
 
 networks:
   app-network:
-    driver: bridge
+    driver: bridge # Use the bridge network driver
