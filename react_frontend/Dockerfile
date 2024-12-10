@@ -2,7 +2,7 @@
 FROM node:20
 
 # Set the working directory
-WORKDIR /Frontend_docker
+WORKDIR /react_frontend_docker
 
 # Install dependencies
 COPY package.json package-lock.json ./
@@ -11,8 +11,6 @@ RUN npm install
 # Copy the rest of the project files
 COPY . .
 
-# Expose port 3000 for Vite's development server
+# Expose port 5173 for Vite's development server
 EXPOSE 5173
 
-# Start the Vite development server
-CMD ["npm", "run", "dev"]

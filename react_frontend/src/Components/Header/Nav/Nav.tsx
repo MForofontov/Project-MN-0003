@@ -18,7 +18,7 @@ const Nav: React.FC<NavProps> = ({ isAuthenticated, handleNavigation, handleLogo
       {isAuthenticated ? (
         <NavItem path="/" label="Logout" onClick={handleLogout} className="logout-button" />
       ) : (
-        <NavItem path="/login" label="Login" onClick={handleNavigation} className="login-button" />
+        <NavItem path="/authentication" label="Login" onClick={handleNavigation} className="login-button" />
       )}
     </ul>
   </nav>

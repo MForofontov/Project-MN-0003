@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from './AuthContext'; // Import the useAuth hook
-import CustomSpinner from './CustomSpinner/CustomSpinner'; // Import the CustomSpinner component
+import { useAuth } from '../Contexts/AuthContext'; // Import the useAuth hook
+import CustomSpinner from '../Components/CustomSpinner/CustomSpinner'; // Import the CustomSpinner component
 
 interface PublicRouteProps {
   component: React.ComponentType<any>;

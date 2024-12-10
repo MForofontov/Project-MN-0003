@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { isAuthenticatedAPI } from '../services/auth'; // Import the function to check if the user is authenticated
-import LogOutAPI from '../services/LogOutAPI'; // Import the function to log out the user
-import LoginUserToken from '../services/LoginUserToken'; // Import the function to log in the user
+import { isAuthenticatedAPI } from '../../services/auth'; // Import the function to check if the user is authenticated
+import LogOutAPI from '../../services/logOutAPI'; // Import the function to log out the user
+import LoginUserToken from '../../services/loginUserToken'; // Import the function to log in the user
 
 // Define the shape of the context's value
 interface AuthContextProps {

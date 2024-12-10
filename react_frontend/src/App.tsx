@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { AuthProvider } from './utils/AuthContext'; // Import the AuthProvider
+import { AuthProvider } from './utils/Contexts/AuthContext'; // Import the AuthProvider
 import Header from './Components/Header/Header'; // Import the Header component
 import Footer from './Components/Footer/Footer'; // Import the Footer component
 import HomePage from './Components/HomePage/HomePage'; // Import the HomePage component
 import Auth from './Components/Auth/Auth'; // Import the Auth component
-import PrivateRoute from './utils/PrivateRoute'; // Import the PrivateRoute component
-import PublicRoute from './utils/PublicRoute'; // Import the PublicRoute component
+import PrivateRoute from './utils/Routes/PrivateRoute'; // Import the PrivateRoute component
+import PublicRoute from './utils/Routes/PublicRoute'; // Import the PublicRoute component
+import NotFound from './utils/Components/NotFound/NotFound'; // Import the NotFound component
 import DashBoard from './Components/DashBoard/DashBoard'; // Import the DashBoard component
 
 const App: React.FC = () => {
@@ -32,9 +33,10 @@ const AppContent: React.FC = () => {
       <Header toggleSidebar={toggleSidebar} /> {/* Render the Header component and pass the toggleSidebar function */}
       <Routes>
         <Route path="/" element={<HomePage />} /> {/* Add a home route */}
-        <Route path="/login" element={<PublicRoute component={Auth} />} /> {/* Add a login route with a public route wrapper */}
+        <Route path="/authentication" element={<PublicRoute component={Auth} />} /> {/* Add a login route with a public route wrapper */}
         <Route path="/dashboard" element={<PrivateRoute component={DashBoard} isSidebarVisible={isSidebarVisible} />} /> {/* Add a dashboard route with a private route wrapper */}
         {/* Add more routes as needed */}
+        <Route path="*" element={<NotFound />} /> {/* Catch-all route for undefined paths */}
       </Routes>
       <Footer /> {/* Render the Footer component */}
     </>

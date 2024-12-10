@@ -1,15 +1,15 @@
 // src/components/Auth/Auth.tsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import CreateUserAPI from '../../services/CreateUserAPI';
-import { useAuth } from '../../utils/AuthContext';
+import CreateUserAPI from '../../services/createUserAPI';
+import { useAuth } from '../../utils/Contexts/AuthContext';
 import LoginForm from './LoginForm/LoginForm';
 import RegisterForm from './RegisterForm/RegisterForm';
 import './Auth.css'; // Import the CSS file
 
 const Auth: React.FC = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, login } = useAuth();
+  const { login } = useAuth();
   const [isLogin, setIsLogin] = React.useState(true);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
