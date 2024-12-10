@@ -1,31 +1,31 @@
-version: '3.8'
+version: '3.8' # Specify the version of the Docker Compose file format
 
 services:
 
   nginx:
-    image: nginx:latest # Use the latest NGINX image
-    container_name: nginx # Name the container
+    build:
+      context: ./nginx # Build the NGINX service from the nginx directory
+    container_name: nginx # Name the container nginx
     ports:
-      - "80:80" # Map port 80 of the host to port 80 of the container
+      - '80:80' # Map port 80 of the host to port 80 of the container
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf # Mount custom NGINX config file
     depends_on:
-      - react_frontend # Ensure the frontend service starts before this service
+      - react_frontend # Ensure the react_frontend service starts before this service
+      
       - user_management_service # Ensure the user_management_service starts before this service
       - data_processing_service # Ensure the data_processing_service starts before this service
-    volumes:
-      - ./vite-app/dist:/usr/share/nginx/html # Mount the built app directory to the NGINX root directory
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf # Mount custom NGINX config file
-    restart: always # Always restart the NGINX container if it stops
     networks:
       - app-network # Connect to the app-network
 
   react_frontend:
     build:
-      context: ./react_frontend # Build the frontend from the react_frontend directory
-    container_name: react_frontend # Name the container
+      context: ./react_frontend # Build the react_frontend service from the react_frontend directory
+    container_name: react_frontend # Name the container react_frontend
     ports:
       - '5173:5173' # Map port 5173 of the host to port 5173 of the container (Vite dev server)
     volumes:
-      - ./Frontend:/react_frontend_docker # Mount the frontend source code directory
+      - ./react_frontend:/react_frontend_docker # Mount the react_frontend source code directory
     command: npm run dev -- --host 0.0.0.0 # Run the Vite dev server
     user: "${UID}:${GID}" # Use the specified user and group IDs
     networks:
@@ -33,14 +33,14 @@ services:
 
   user_management_service:
     build:
-      context: ./user_management_service # Build the user management service from the user_management_service directory
-    container_name: user_management_service # Name the container
+      context: ./user_management_service # Build the user_management_service from the user_management_service directory
+    container_name: user_management_service # Name the container user_management_service
     env_file:
       - .env # Use the environment variables from the .env file
     ports:
       - '8000:8000' # Map port 8000 of the host to port 8000 of the container
     volumes:
-      - ./user_management_service:/user_management_service_docker # Mount the user management service source code directory
+      - ./user_management_service:/user_management_service_docker # Mount the user_management_service source code directory
     user: "${UID}:${GID}" # Use the specified user and group IDs
     depends_on:
       - db_user_management_service # Ensure the db_user_management_service starts before this service
@@ -49,14 +49,14 @@ services:
 
   data_processing_service:
     build:
-      context: ./data_processing_service # Build the data processing service from the data_processing_service directory
-    container_name: data_processing_service # Name the container
+      context: ./data_processing_service # Build the data_processing_service from the data_processing_service directory
+    container_name: data_processing_service # Name the container data_processing_service
     env_file:
       - .env # Use the environment variables from the .env file
     ports:
       - '8001:8001' # Map port 8001 of the host to port 8001 of the container
     volumes:
-      - ./data_processing_service:/data_processing_service_docker # Mount the data processing service source code directory
+      - ./data_processing_service:/data_processing_service_docker # Mount the data_processing_service source code directory
     user: "${UID}:${GID}" # Use the specified user and group IDs
     depends_on:
       - db_data_processing_service # Ensure the db_data_processing_service starts before this service
@@ -66,7 +66,7 @@ services:
 
   db_user_management_service:
     image: postgres:latest # Use the latest PostgreSQL image
-    container_name: db_user_management_service # Name the container
+    container_name: db_user_management_service # Name the container db_user_management_service
     env_file:
       - .env # Use the environment variables from the .env file
     environment:
@@ -83,7 +83,7 @@ services:
 
   db_data_processing_service:
     image: postgres:latest # Use the latest PostgreSQL image
-    container_name: db_data_processing_service # Name the container
+    container_name: db_data_processing_service # Name the container db_data_processing_service
     env_file:
       - .env # Use the environment variables from the .env file
     environment:
@@ -100,7 +100,7 @@ services:
 
   data_processing_service_redis:
     image: redis:latest # Use the latest Redis image
-    container_name: data_processing_service_redis # Name the container
+    container_name: data_processing_service_redis # Name the container data_processing_service_redis
     ports:
       - '6379:6379' # Map port 6379 of the host to port 6379 of the container
     networks:

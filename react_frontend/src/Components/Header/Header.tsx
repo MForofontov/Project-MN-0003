@@ -18,7 +18,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
     const handleLogout = async () => {
       // Add your logout logic here
       await logout();
-      navigate('/login/');
+      navigate('/authentication/');
     };
   
     const handleNavigation = (path: string) => {
