@@ -1,11 +1,12 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { isAuthenticatedAPI } from '../../services/auth'; // Import the function to check if the user is authenticated
-import LogOutAPI from '../../services/logOutAPI'; // Import the function to log out the user
-import LoginUserToken from '../../services/loginUserToken'; // Import the function to log in the user
+import React, { createContext, useState, useContext, ReactNode, useEffect, useMemo } from 'react';
+import { isAuthenticatedAPI } from '../../services/auth'; // API to check authentication status
+import LogOutAPI from '../../services/logOutAPI'; // API to log out
+import LoginUserToken from '../../services/loginUserToken'; // API to log in
 
 // Define the shape of the context's value
 interface AuthContextProps {
   isAuthenticated: boolean | null;
+  isloading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -13,46 +14,64 @@ interface AuthContextProps {
 // Create a context object with a default value of undefined
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
-// Create a provider component that wraps your app and makes the auth object available to any child component that calls useAuth()
+// Provider component
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null); // State to hold the authentication status
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null); // Authentication status
+  const [isloading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
-    // Simulate an async authentication check
     const checkAuth = async () => {
-      const authStatus = await isAuthenticatedAPI(); // Check if the user is authenticated
-      setIsAuthenticated(authStatus); // Update the authentication status
+      try {
+        const authStatus = await isAuthenticatedAPI(); // Call API to check auth status
+        console.log('loading component authStatus:', authStatus);
+        setIsAuthenticated(authStatus);
+      } catch (error) {
+        console.error('Error checking authentication status:', error);
+        setIsAuthenticated(false); // Default to not authenticated on error
+      } finally {
+        setLoading(false); // Stop loading
+      }
     };
 
-    checkAuth(); // Call the function to check authentication status when the component mounts
+    checkAuth(); // Perform the auth check on mount
   }, []);
 
   // Function to log in the user
   const login = async (email: string, password: string) => {
     try {
-      await LoginUserToken(email, password); // Call the API to log in the user
-      setIsAuthenticated(true); // Update the authentication status to true
+      await LoginUserToken(email, password); // Perform login
+      setIsAuthenticated(true); // Update status on success
+      console.log('logged in authstatus:', isAuthenticated);
     } catch (error) {
       console.error('Error logging in:', error);
-      setIsAuthenticated(false); // Update the authentication status to false if login fails
+      setIsAuthenticated(false); // Update status on failure
+      throw error; // Propagate error for UI handling
     }
   };
 
   // Function to log out the user
   const logout = async () => {
     try {
-      await LogOutAPI(); // Call the API to log out the user
-      setIsAuthenticated(false); // Update the authentication status to false
+      await LogOutAPI(); // Perform logout
+      setIsAuthenticated(false); // Update status
+      console.log('logged out authstatus:', isAuthenticated);
     } catch (error) {
       console.error('Error logging out:', error);
     }
   };
 
-  return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-      {children} {/* Render the children components */}
-    </AuthContext.Provider>
+  // Memoize the context value
+  const value = useMemo(
+    () => ({
+      isAuthenticated,
+      isloading,
+      login,
+      logout,
+    }),
+    [isAuthenticated, isloading]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 // Custom hook to use the AuthContext

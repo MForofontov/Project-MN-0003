@@ -1,21 +1,44 @@
 /* src/components/Profile/SideBar.css */
 .sidebar {
-    position: absolute; /* Position the sidebar absolutely within the parent */
-    top: 0;
-    left: -250px; /* Initial position off-screen */
-    width: 250px; /* Sidebar width */
-    height: 100%; /* Make the sidebar take up 100% of the parent div's height */
-    transition: left 0.3s ease; /* Smooth transition for sliding in */
-    z-index: 1; /* Ensure the sidebar stays below the header */
-    overflow: hidden; /* Hide overflow content */
-  }
-  
+  position: absolute; /* Position the sidebar absolutely within the parent */
+  top: 0;
+  left: -250px; /* Initial position off-screen */
+  width: 250px; /* Sidebar width */
+  height: 100%; /* Make the sidebar take up 100% of the parent div's height */
+  background-color: #575757;
+  transition: left 0.3s ease, opacity 0.3s ease, visibility 0.3s ease; /* Smooth transition for sliding in and fading */
+  z-index: 1; /* Ensure the sidebar stays below the header */
+  overflow: hidden; /* Hide overflow content */
+  opacity: 0; /* Initially hidden */
+  visibility: hidden; /* Initially hidden */
+}
+
 .sidebar.visible {
   left: 0; /* Slide in the sidebar */
-  background-color: #575757;
+  opacity: 1; /* Fully visible */
+  visibility: visible; /* Fully visible */
 }
 
 .sidebar h2 {
   color: white;
   text-align: center;
+}
+
+/* Media queries for dynamic behavior */
+@media (max-width: 1024px) {
+  .sidebar {
+    top: -100%; /* Initial position off-screen above */
+    left: 0; /* Reset left position */
+    width: 100%; /* Full width */
+    height: auto; /* Auto height */
+    transition: top 0.3s ease, opacity 0.3s ease, visibility 0.3s ease; /* Smooth transition for sliding down and fading */
+    opacity: 0; /* Initially hidden */
+    visibility: hidden; /* Initially hidden */
+  }
+
+  .sidebar.visible {
+    top: 0; /* Slide down the sidebar */
+    opacity: 1; /* Fully visible */
+    visibility: visible; /* Fully visible */
+  }
 }

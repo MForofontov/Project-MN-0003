@@ -1,26 +1,29 @@
 /* FILE: utils/Components/SkeletonLoader.css */
 
 .skeleton-loader {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 15px;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.skeleton-button {
+  width: 100px;
+  height: 40px;
+  background-color: #333;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #333;
   }
-  
-  .skeleton-button {
-    width: 100px;
-    height: 40px;
-    background-color: #e0e0e0;
-    border-radius: 4px;
-    animation: pulse 1.5s infinite;
+  50% {
+    background-color: #444;
   }
-  
-  @keyframes pulse {
-    0% {
-      background-color: #e0e0e0;
-    }
-    50% {
-      background-color: #f0f0f0;
-    }
-    100% {
-      background-color: #e0e0e0;
-    }
+  100% {
+    background-color: #333;
   }
+}

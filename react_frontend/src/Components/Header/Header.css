@@ -6,3 +6,9 @@
   background-color: hsl(0, 0%, 20%);
   color: white;
 }
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adjust the gap between the SidebarToggleButton and the Logo */
+}

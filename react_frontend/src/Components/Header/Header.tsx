@@ -1,5 +1,5 @@
 // src/components/Header/Header.tsx
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../utils/Contexts/AuthContext';
 import SidebarToggleButton from './SideBarToggleButton/SideBarToggleButton';
@@ -14,19 +14,8 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
     const navigate = useNavigate();
-    const { isAuthenticated, logout } = useAuth();
-    const [isLoading, setIsLoading] = useState(true); // State to manage loading status
+    const { isAuthenticated, isloading, logout } = useAuth();
 
-    useEffect(() => {
-      // Simulate an async authentication check
-      const checkAuth = async () => {
-        // Simulate a delay for the authentication check
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setIsLoading(false); // Set loading to false after the check
-      };
-
-      checkAuth();
-    }, []);
     const handleLogout = async () => {
       // Add your logout logic here
       await logout();
@@ -39,9 +28,15 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
   
     return (
       <header className="header">
-        {isAuthenticated && <SidebarToggleButton toggleSidebar={toggleSidebar} />}
+      {isAuthenticated ? (
+        <div className="header-left">
+        <SidebarToggleButton toggleSidebar={toggleSidebar} />
+        <Logo /> {/* Render the Logo component */}
+        </div>
+      ) : (
         <Logo />
-        {isLoading ? (
+      )}
+        {isloading ? (
           <SkeletonLoader />
         ) : (
         <Nav isAuthenticated={isAuthenticated} handleNavigation={handleNavigation} handleLogout={handleLogout} />

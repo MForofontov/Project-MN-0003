@@ -2,7 +2,9 @@ import React from 'react';
 import './Logo.css';
 
 const Logo: React.FC = () => (
-  <div className="logo">My Website</div>
+  <div className="logo">
+    <img src="../../../../public/vite.svg" alt="My Website Logo" />
+  </div>
 );
 
 export default Logo;

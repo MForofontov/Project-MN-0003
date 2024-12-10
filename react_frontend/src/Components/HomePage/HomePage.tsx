@@ -5,21 +5,10 @@ import { useAuth } from '../../utils/Contexts/AuthContext';
 import Loading from '../../utils/Components/Loading/Loading';
 
 const HomePage: React.FC = () => {
-    const { isAuthenticated } = useAuth(); // Get the authentication status from the context
-    const [isLoading, setIsLoading] = useState(true); // State to manage loading status
+    const { isAuthenticated, isloading } = useAuth(); // Get the authentication status from the context
   
-    useEffect(() => {
-      // Simulate an async authentication check
-      const checkAuth = async () => {
-        // Simulate a delay for the authentication check
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setIsLoading(false); // Set loading to false after the check
-      };
   
-      checkAuth();
-    }, []);
-  
-    if (isLoading) {
+    if (isloading) {
       return <Loading />; // Show a loading indicator while checking authentication
     }
   
