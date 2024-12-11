@@ -27,8 +27,8 @@ const AppContent: React.FC = () => {
   const { setIsAuthenticated } = useAuth(); // Get the setIsAuthenticated function from AuthContext
   
   useEffect(() => {
-    setupResponseInterceptorsRefreshToken((isAuthenticated: boolean) => {
-      setIsAuthenticated(isAuthenticated); // Update authentication status using AuthContext
+    setupResponseInterceptorsRefreshToken((status: boolean) => {
+      setIsAuthenticated(status); // Update authentication status using AuthContext
     });
   }, []);
 
