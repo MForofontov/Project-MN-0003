@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { AuthProvider } from './utils/Contexts/AuthContext'; // Import the AuthProvider
 import Header from './Components/Header/Header'; // Import the Header component
@@ -9,7 +9,7 @@ import PrivateRoute from './utils/Routes/PrivateRoute'; // Import the PrivateRou
 import PublicRoute from './utils/Routes/PublicRoute'; // Import the PublicRoute component
 import NotFound from './utils/Components/NotFound/NotFound'; // Import the NotFound component
 import DashBoard from './Components/DashBoard/DashBoard'; // Import the DashBoard component
-import { setupInterceptors } from './services/api'; // Import the setupInterceptors function
+import { setupResponseInterceptorsRefreshToken } from './utils/ResponseInterceptors/setupResponseInterceptorsRefreshToken'; // Import the setupResponseInterceptorsRefreshToken function
 import { useAuth } from './utils/Contexts/AuthContext'; // Import the useAuth hook
 
 const App: React.FC = () => {
@@ -27,7 +27,7 @@ const AppContent: React.FC = () => {
   const { setIsAuthenticated } = useAuth(); // Get the setIsAuthenticated function from AuthContext
   
   useEffect(() => {
-    setupInterceptors((isAuthenticated: boolean) => {
+    setupResponseInterceptorsRefreshToken((isAuthenticated: boolean) => {
       setIsAuthenticated(isAuthenticated); // Update authentication status using AuthContext
     });
   }, []);
