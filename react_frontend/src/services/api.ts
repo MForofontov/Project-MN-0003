@@ -44,71 +44,41 @@ const refreshToken = async (): Promise<void> => {
   }
 };
 
-// Add a response interceptor to handle token expiration for user management API
-userManagementApi.interceptors.response.use(
-  (response) => response, // Return the response if no error
-  async (error) => {
-    const originalRequest = error.config; // Get the original request
-    if (error.response.status === 401 && !originalRequest._retry) { // Check if the error is due to an expired token
-      if (!isRefreshing) { // If not already refreshing the token
-        isRefreshing = true; // Set the flag to indicate token refresh is in progress
+export const setupInterceptors = (setIsAuthenticated: (status: boolean) => void) => {
+  const responseInterceptor = async (error: any) => {
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      if (!isRefreshing) {
+        isRefreshing = true;
         try {
-          await refreshToken(); // Refresh the token
-          isRefreshing = false; // Reset the flag
-          refreshSubscribers = []; // Clear the subscribers array
+          await refreshToken();
+          isRefreshing = false;
+          refreshSubscribers = [];
+          setIsAuthenticated(true); // Set isAuthenticated to true on successful token refresh
+          console.log('Updated isAuthenticated status due to token refresh success:', true);
         } catch (refreshError) {
-          isRefreshing = false; // Reset the flag if token refresh fails
+          isRefreshing = false;
           console.error('Token refresh failed:', refreshError);
-          // Optionally, handle logout or redirect to login page
-          return Promise.reject(refreshError); // Reject the promise with the refresh error
+          setIsAuthenticated(false); // Set isAuthenticated to false on token refresh failure
+          console.log('Updated isAuthenticated status due to token refresh fail:', false);
+          return Promise.reject(refreshError);
         }
       }
 
-      // Create a promise to retry the original request
       const retryOriginalRequest = new Promise<AxiosResponse>((resolve) => {
         addRefreshSubscriber(() => {
-          resolve(userManagementApi(originalRequest)); // Retry the original request once the token is refreshed
+          resolve(axios(originalRequest));
         });
       });
 
-      return retryOriginalRequest; // Return the promise to retry the original request
+      return retryOriginalRequest;
     }
-    return Promise.reject(error); // Reject the promise with the original error
-  }
-);
+    return Promise.reject(error);
+  };
 
-// Add a response interceptor to handle token expiration for data processing API
-dataProcessingApi.interceptors.response.use(
-  (response) => response, // Return the response if no error
-  async (error) => {
-    const originalRequest = error.config; // Get the original request
-    if (error.response.status === 401 && !originalRequest._retry) { // Check if the error is due to an expired token
-      if (!isRefreshing) { // If not already refreshing the token
-        isRefreshing = true; // Set the flag to indicate token refresh is in progress
-        try {
-          await refreshToken(); // Refresh the token
-          isRefreshing = false; // Reset the flag
-          refreshSubscribers = []; // Clear the subscribers array
-        } catch (refreshError) {
-          isRefreshing = false; // Reset the flag if token refresh fails
-          console.error('Token refresh failed:', refreshError);
-          // Optionally, handle logout or redirect to login page
-          return Promise.reject(refreshError); // Reject the promise with the refresh error
-        }
-      }
-
-      // Create a promise to retry the original request
-      const retryOriginalRequest = new Promise<AxiosResponse>((resolve) => {
-        addRefreshSubscriber(() => {
-          resolve(dataProcessingApi(originalRequest)); // Retry the original request once the token is refreshed
-        });
-      });
-
-      return retryOriginalRequest; // Return the promise to retry the original request
-    }
-    return Promise.reject(error); // Reject the promise with the original error
-  }
-);
+  userManagementApi.interceptors.response.use((response) => response, responseInterceptor);
+  dataProcessingApi.interceptors.response.use((response) => response, responseInterceptor);
+};
 
 // Function to call the user management API with token refresh logic
 const callUserManagementAPI = async (config: AxiosRequestConfig): Promise<AxiosResponse> => {

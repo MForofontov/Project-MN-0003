@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       await LoginUserToken(email, password); // Perform login
       setIsAuthenticated(true); // Update status on success
-      console.log('logged in authstatus:', isAuthenticated);
+      console.log('logged in authstatus:', true);
     } catch (error) {
       console.error('Error logging in:', error);
       setIsAuthenticated(false); // Update status on failure
@@ -55,11 +55,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       await LogOutAPI(); // Perform logout
       setIsAuthenticated(false); // Update status
-      console.log('logged out authstatus:', isAuthenticated);
+      console.log('logged out authstatus:', false);
     } catch (error) {
       console.error('Error logging out:', error);
     }
   };
+
 
   // Memoize the context value
   const value = useMemo(
