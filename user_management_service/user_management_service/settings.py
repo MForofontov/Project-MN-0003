@@ -229,5 +229,3 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
-
-REST_USE_JWT = True

@@ -17,6 +17,6 @@ urlpatterns = [
     
     path('csrf/', get_csrf_token, name='get-csrf-token'),
 
-    path('dj-rest-auth/google/', include('allauth.socialaccount.urls')),
+    path('accounts/', include('allauth.urls')),
 
 ]
