@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
     "corsheaders",
+    'dj_rest_auth',
 
     # Local Apps
     "users.apps.UsersConfig",
@@ -163,7 +164,6 @@ CORS_ALLOW_CREDENTIALS = True
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -187,6 +187,14 @@ SIMPLE_JWT = {
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
 
+SIMPLE_JWT.update({
+    'AUTH_COOKIE': 'access_token',  # Cookie name. Can be changed.
+    'AUTH_COOKIE_SECURE': True,  # Whether the auth cookies should be secure (https).
+    'AUTH_COOKIE_HTTP_ONLY': True,  # Http only cookie flag. Can't be accessed by javascript.
+    'AUTH_COOKIE_PATH': '/',  # The path of the auth cookie.
+    'AUTH_COOKIE_SAMESITE': 'Lax',  # Same site cookie flag.
+})
+
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
@@ -202,13 +210,6 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 LOGIN_REDIRECT_URL = 'http://localhost:5173/dashboard'
 LOGOUT_REDIRECT_URL = '/'
-
-REST_USE_JWT = True
-REST_AUTH_TOKEN_MODEL = None
-
-REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'users.serializers.UserSerializer',
-}
 
 SOCIALACCOUNT_LOGIN_ON_GET=True # Skip intermidiary step in transition to socials
 
@@ -228,3 +229,5 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+REST_USE_JWT = True

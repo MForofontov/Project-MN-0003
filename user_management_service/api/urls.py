@@ -2,8 +2,7 @@ from django.urls import path, include
 from users.views.auth_views import (CustomTokenObtainPairView,
                                     CustomTokenRefreshView,
                                     UserStatusView,
-                                    LogoutView,
-                                    google_login_callback)
+                                    LogoutView,)
 from users.views.users_views import UserCreateView, UserProfileView
 from users.views.csrf_token_views import get_csrf_token
 
@@ -18,7 +17,6 @@ urlpatterns = [
     
     path('csrf/', get_csrf_token, name='get-csrf-token'),
 
-    path('accounts/google/login/callback/', google_login_callback, name='google_login_view'),
-    path('accounts/', include('allauth.urls')),
+    path('dj-rest-auth/google/', include('allauth.socialaccount.urls')),
 
 ]

@@ -3,11 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from users.serializers import CustomTokenObtainPairSerializer
-from allauth.socialaccount.models import SocialToken, SocialLogin
-from allauth.socialaccount.helpers import complete_social_login
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.http import JsonResponse
-from django.contrib.auth import login
+from django.conf import settings
 
 # Custom view to refresh JWT tokens using a refresh token stored in cookies
 class CustomTokenRefreshView(TokenRefreshView):
@@ -32,14 +28,14 @@ class CustomTokenRefreshView(TokenRefreshView):
         # Retrieve the new access token from the validated data
         access = serializer.validated_data.get('access')
 
-        # Set the new access token in cookies
         response.set_cookie(
-            'accessToken', 
-            access, 
-            httponly=True, 
-            secure=True,  
-            samesite='None',
-            max_age=3600,  # 1 hour
+            key=settings.SIMPLE_JWT['AUTH_COOKIE'],
+            value=access,
+            expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
+            max_age=3600  # 1 hour
         )
 
         # Remove the refresh and access tokens from the response data
@@ -68,21 +64,22 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
         # Set the access token in cookies
         response.set_cookie(
-            'accessToken', 
-            access, 
-            httponly=True, 
-            secure=True,  
-            samesite='None',
-            max_age=3600,  # 1 hour
+            key=settings.SIMPLE_JWT['AUTH_COOKIE'],
+            value=access,
+            expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
+            max_age=3600  # 1 hour
         )
-        # Set the refresh token in cookies
         response.set_cookie(
-            'refreshToken', 
-            refresh, 
-            httponly=True, 
-            secure=True,  
-            samesite='None',
-            max_age=3600 * 24,  # 1 day
+            key='refreshToken',
+            value=refresh,
+            expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
+            max_age=3600 * 24  # 1 day
         )
 
         # Remove the refresh and access tokens from the response data
@@ -114,52 +111,3 @@ class UserStatusView(APIView):
     def get(self, request, *args, **kwargs):
         # Return a response indicating the user is authenticated
         return Response({"message": "User is authenticated"}, status=status.HTTP_200_OK)
-
-def google_login_callback(request):
-    # Extract the token from the request
-    token = request.GET.get('code')
-    if not token:
-        return JsonResponse({'error': 'No token provided'}, status=400)
-
-    # Create a SocialLogin object
-    sociallogin = SocialLogin(token=SocialToken(token=token))
-
-    # Complete the social login process
-    try:
-        complete_social_login(request, sociallogin)
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=400)
-
-    if not sociallogin.is_valid():
-        return JsonResponse({'error': 'Invalid login'}, status=400)
-
-    # Log in the user
-    user = sociallogin.user
-    login(request, user)
-
-    # Create JWT tokens
-    refresh = RefreshToken.for_user(user)
-    access_token = str(refresh.access_token)
-    refresh_token = str(refresh)
-
-    # Set the tokens as HttpOnly cookies
-    response = JsonResponse({'message': 'Login successful'})
-    response.set_cookie(
-        'accessToken', 
-        access_token, 
-        httponly=True, 
-        secure=True,  
-        samesite='None',
-        max_age=3600  # 1 hour
-    )
-    response.set_cookie(
-        'refreshToken', 
-        refresh_token, 
-        httponly=True, 
-        secure=True,  
-        samesite='None',
-        max_age=3600 * 24  # 1 day
-    )
-
-    # Redirect to your frontend
-    return response
