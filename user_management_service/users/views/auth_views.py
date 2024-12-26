@@ -20,8 +20,14 @@ class CustomTokenRefreshView(TokenRefreshView):
             # Validate the serializer data
             serializer.is_valid(raise_exception=True)
         except Exception as e:
-            # Return an error response if validation fails
-            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            # Create a response indicating failure
+            response = Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Delete the access and refresh tokens from cookies
+            response.delete_cookie('accessToken')
+            response.delete_cookie('refreshToken')
+            
+            return response
 
         # Create a response with the validated data
         response = Response(serializer.validated_data)
