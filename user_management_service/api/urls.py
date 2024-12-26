@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from users.views.auth_views import CustomTokenObtainPairView, CustomTokenRefreshView, UserStatusView, LogoutView
 from users.views.users_views import UserCreateView, UserProfileView
 from users.views.csrf_token_views import get_csrf_token
@@ -13,4 +13,7 @@ urlpatterns = [
     path('profile/', UserProfileView.as_view(), name='user-profile'),
     
     path('csrf/', get_csrf_token, name='get-csrf-token'),
+
+    path('accounts/', include('allauth.urls')),
+
 ]
