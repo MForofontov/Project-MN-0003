@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from users.serializers import CustomTokenObtainPairSerializer
+from django.conf import settings
 
 # Custom view to refresh JWT tokens using a refresh token stored in cookies
 class CustomTokenRefreshView(TokenRefreshView):
@@ -19,22 +20,28 @@ class CustomTokenRefreshView(TokenRefreshView):
             # Validate the serializer data
             serializer.is_valid(raise_exception=True)
         except Exception as e:
-            # Return an error response if validation fails
-            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            # Create a response indicating failure
+            response = Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Delete the access and refresh tokens from cookies
+            response.delete_cookie('accessToken')
+            response.delete_cookie('refreshToken')
+            
+            return response
 
         # Create a response with the validated data
         response = Response(serializer.validated_data)
         # Retrieve the new access token from the validated data
-        access = serializer.validated_data.get('access')
+        access_token = serializer.validated_data.get('access')
 
-        # Set the new access token in cookies
         response.set_cookie(
-            'accessToken', 
-            access, 
-            httponly=True, 
-            secure=True,  
-            samesite='None',
-            max_age=3600,  # 1 hour
+            key=settings.SIMPLE_JWT['AUTH_COOKIE'],
+            value=access_token,
+            expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
+            max_age=3600  # 1 hour
         )
 
         # Remove the refresh and access tokens from the response data
@@ -58,26 +65,27 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         response = Response(serializer.validated_data)
 
         # Retrieve the refresh and access tokens from the validated data
-        refresh = serializer.validated_data['refresh']
-        access = serializer.validated_data['access']
+        access_token = serializer.validated_data['access']
+        refresh_token = serializer.validated_data['refresh']
 
         # Set the access token in cookies
         response.set_cookie(
-            'accessToken', 
-            access, 
-            httponly=True, 
-            secure=True,  
-            samesite='None',
-            max_age=3600,  # 1 hour
+            key=settings.SIMPLE_JWT['AUTH_COOKIE'],
+            value=access_token,
+            expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
+            max_age=3600  # 1 hour
         )
-        # Set the refresh token in cookies
         response.set_cookie(
-            'refreshToken', 
-            refresh, 
-            httponly=True, 
-            secure=True,  
-            samesite='None',
-            max_age=3600 * 24,  # 1 day
+            key='refreshToken',
+            value=refresh_token,
+            expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
+            max_age=3600 * 24  # 1 day
         )
 
         # Remove the refresh and access tokens from the response data

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { AuthProvider } from './utils/Contexts/AuthContext'; // Import the AuthProvider
+import { AuthProvider } from './utils/Contexts/AuthContext'; // Import the AuthProvider to provide authentication context
 import Header from './Components/Header/Header'; // Import the Header component
 import Footer from './Components/Footer/Footer'; // Import the Footer component
 import HomePage from './Components/HomePage/HomePage'; // Import the HomePage component
@@ -10,7 +10,7 @@ import PublicRoute from './utils/Routes/PublicRoute'; // Import the PublicRoute 
 import NotFound from './utils/Components/NotFound/NotFound'; // Import the NotFound component
 import DashBoard from './Components/DashBoard/DashBoard'; // Import the DashBoard component
 import { setupResponseInterceptorsRefreshToken } from './utils/ResponseInterceptors/setupResponseInterceptorsRefreshToken'; // Import the setupResponseInterceptorsRefreshToken function
-import { useAuth } from './utils/Contexts/AuthContext'; // Import the useAuth hook
+import { useAuth } from './utils/Contexts/AuthContext'; // Import the useAuth hook to access authentication context
 
 const App: React.FC = () => {
   return (
@@ -30,7 +30,7 @@ const AppContent: React.FC = () => {
     setupResponseInterceptorsRefreshToken((status: boolean) => {
       setIsAuthenticated(status); // Update authentication status using AuthContext
     });
-  }, []);
+  }, [setIsAuthenticated]); // Dependency array ensures this effect runs only once when setIsAuthenticated is stable
 
   // Function to toggle sidebar visibility
   const toggleSidebar = () => {
