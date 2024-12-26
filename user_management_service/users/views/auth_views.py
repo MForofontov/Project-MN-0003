@@ -26,11 +26,11 @@ class CustomTokenRefreshView(TokenRefreshView):
         # Create a response with the validated data
         response = Response(serializer.validated_data)
         # Retrieve the new access token from the validated data
-        access = serializer.validated_data.get('access')
+        access_token = serializer.validated_data.get('access')
 
         response.set_cookie(
             key=settings.SIMPLE_JWT['AUTH_COOKIE'],
-            value=access,
+            value=access_token,
             expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
             secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
             httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
@@ -59,13 +59,13 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         response = Response(serializer.validated_data)
 
         # Retrieve the refresh and access tokens from the validated data
-        refresh = serializer.validated_data['refresh']
-        access = serializer.validated_data['access']
+        access_token = serializer.validated_data['access']
+        refresh_token = serializer.validated_data['refresh']
 
         # Set the access token in cookies
         response.set_cookie(
             key=settings.SIMPLE_JWT['AUTH_COOKIE'],
-            value=access,
+            value=access_token,
             expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
             secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
             httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
@@ -74,7 +74,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         )
         response.set_cookie(
             key='refreshToken',
-            value=refresh,
+            value=refresh_token,
             expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
             secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
             httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
