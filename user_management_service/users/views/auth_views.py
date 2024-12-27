@@ -4,12 +4,29 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from users.serializers import CustomTokenObtainPairSerializer
 from django.conf import settings
+from django.http import HttpRequest, HttpResponse
+from typing import Any
 
-# Custom view to refresh JWT tokens using a refresh token stored in cookies
 class CustomTokenRefreshView(TokenRefreshView):
-    def post(self, request, *args, **kwargs):
+    """
+    Custom view to refresh JWT tokens using a refresh token stored in cookies.
+    """
+    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """
+        Handles POST requests to refresh JWT tokens.
+
+        Parameters
+        ----------
+        request : HttpRequest
+            The HTTP request object.
+
+        Returns
+        -------
+        HttpResponse
+            A response containing the new JWT tokens and setting them in cookies.
+        """
         # Retrieve the refresh token from cookies
-        refresh_token = request.COOKIES.get('refreshToken')
+        refresh_token: str = request.COOKIES.get('refreshToken')
         if not refresh_token:
             # Return an error response if the refresh token is missing
             return Response({'detail': 'Refresh token missing'}, status=status.HTTP_400_BAD_REQUEST)
@@ -21,7 +38,7 @@ class CustomTokenRefreshView(TokenRefreshView):
             serializer.is_valid(raise_exception=True)
         except Exception as e:
             # Create a response indicating failure
-            response = Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            response: Response = Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
             
             # Delete the access and refresh tokens from cookies
             response.delete_cookie('accessToken')
@@ -32,8 +49,9 @@ class CustomTokenRefreshView(TokenRefreshView):
         # Create a response with the validated data
         response = Response(serializer.validated_data)
         # Retrieve the new access token from the validated data
-        access_token = serializer.validated_data.get('access')
+        access_token: str = serializer.validated_data.get('access')
 
+        # Set the new access token in cookies
         response.set_cookie(
             key=settings.SIMPLE_JWT['AUTH_COOKIE'],
             value=access_token,
@@ -51,22 +69,37 @@ class CustomTokenRefreshView(TokenRefreshView):
         # Return the response
         return response
 
-# Custom view to obtain JWT tokens (access and refresh) and store them in cookies
 class CustomTokenObtainPairView(TokenObtainPairView):
+    """
+    Custom view to obtain JWT tokens (access and refresh) and store them in cookies.
+    """
     # Specify the custom serializer class to use
     serializer_class = CustomTokenObtainPairSerializer
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """
+        Handles POST requests to obtain JWT tokens and store them in cookies.
+
+        Parameters
+        ----------
+        request : HttpRequest
+            The HTTP request object.
+
+        Returns
+        -------
+        HttpResponse
+            A response containing the JWT tokens and setting them in cookies.
+        """
         # Initialize the serializer with the request data
-        serializer = self.get_serializer(data=request.data)
+        serializer: CustomTokenObtainPairSerializer = self.get_serializer(data=request.data)
         # Validate the serializer data
         serializer.is_valid(raise_exception=True)
         # Create a response with the validated data
-        response = Response(serializer.validated_data)
+        response: Response = Response(serializer.validated_data)
 
         # Retrieve the refresh and access tokens from the validated data
-        access_token = serializer.validated_data['access']
-        refresh_token = serializer.validated_data['refresh']
+        access_token: str = serializer.validated_data['access']
+        refresh_token: str = serializer.validated_data['refresh']
 
         # Set the access token in cookies
         response.set_cookie(
@@ -78,6 +111,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
             max_age=3600  # 1 hour
         )
+        # Set the refresh token in cookies
         response.set_cookie(
             key='refreshToken',
             value=refresh_token,
@@ -89,31 +123,61 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         )
 
         # Remove the refresh and access tokens from the response data
-        response.data.pop('refresh')
-        response.data.pop('access')
+        response.data.pop('refresh', None)
+        response.data.pop('access', None)
 
         # Return the response
         return response
 
-# View to handle user logout by deleting JWT tokens from cookies
 class LogoutView(APIView):
+    """
+    View to handle user logout by deleting JWT tokens from cookies.
+    """
     # Require the user to be authenticated to access this view
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """
+        Handles POST requests to log out the user by deleting JWT tokens from cookies.
+
+        Parameters
+        ----------
+        request : HttpRequest
+            The HTTP request object.
+
+        Returns
+        -------
+        HttpResponse
+            A response indicating successful logout.
+        """
         # Create a response indicating successful logout
-        response = Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
+        response: Response = Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
         # Delete the access and refresh tokens from cookies
         response.delete_cookie('accessToken')
         response.delete_cookie('refreshToken')
         # Return the response
         return response
 
-# View to check if the user is authenticated
 class UserStatusView(APIView):
+    """
+    View to check if the user is authenticated.
+    """
     # Require the user to be authenticated to access this view
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """
+        Handles GET requests to check if the user is authenticated.
+
+        Parameters
+        ----------
+        request : HttpRequest
+            The HTTP request object.
+
+        Returns
+        -------
+        HttpResponse
+            A response indicating the user is authenticated.
+        """
         # Return a response indicating the user is authenticated
         return Response({"message": "User is authenticated"}, status=status.HTTP_200_OK)
