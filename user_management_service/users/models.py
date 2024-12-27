@@ -74,14 +74,22 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
     Custom user model that uses email instead of username.
     """
+    REGISTRATION_METHOD_CHOICES = [
+        ('custom', 'custom_Login'),
+        ('google', 'google_OAuth'),
+        ('facebook', 'facebook_OAuth'),
+    ]
+
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     date_of_birth = models.DateField(blank=True, null=True)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True)
+    registration_method = models.CharField(max_length=20, choices=REGISTRATION_METHOD_CHOICES, default='custom')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_email_confirmed: bool = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
 
     objects: CustomUserManager = CustomUserManager()
