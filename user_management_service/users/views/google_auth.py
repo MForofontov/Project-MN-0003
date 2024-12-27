@@ -4,6 +4,7 @@ from django.conf import settings
 from django.views import View
 from users.models import CustomUser
 from rest_framework_simplejwt.tokens import RefreshToken
+from typing import Optional
 
 class GoogleLoginView(View):
     """
@@ -64,16 +65,16 @@ class GoogleCallbackView(View):
         }
         token_response: requests.Response = requests.post(token_url, data=token_data)
         token_json: dict = token_response.json()
-        access_token: str = token_json.get('access_token')
-        google_refresh_token: str = token_json.get('refresh_token')
+        access_token: Optional[str] = token_json.get('access_token')
+        google_refresh_token: Optional[str] = token_json.get('refresh_token')
         user_info_url: str = "https://www.googleapis.com/oauth2/v1/userinfo"
         user_info_params: dict = {'access_token': access_token}
         user_info_response: requests.Response = requests.get(user_info_url, params=user_info_params)
         user_info: dict = user_info_response.json()
 
-        email: str = user_info.get('email')
-        first_name: str = user_info.get('given_name')
-        last_name: str = user_info.get('family_name')
+        email: Optional[str] = user_info.get('email')
+        first_name: Optional[str] = user_info.get('given_name')
+        last_name: Optional[str] = user_info.get('family_name')
 
         # Check if user exists, create if not
         user, created = CustomUser.objects.get_or_create(
@@ -131,7 +132,7 @@ class RefreshGoogleTokenView(View):
 
         if token_response.status_code == 200:
             token_json: dict = token_response.json()
-            new_google_access_token: str = token_json.get('access_token')
+            new_google_access_token: Optional[str] = token_json.get('access_token')
 
             # Generate new JWT tokens using the new Google access token
             refresh: RefreshToken = RefreshToken.for_user(user)
@@ -144,7 +145,7 @@ class RefreshGoogleTokenView(View):
             response.set_cookie('refreshToken', refresh_token_jwt, httponly=True, secure=False, samesite='Lax')
         else:
             # Create response indicating failure and clear the access and refresh tokens from cookies
-            response: JsonResponse = JsonResponse({'message': 'Failed to refresh tokens'}, status=400)
+            response = JsonResponse({'message': 'Failed to refresh tokens'}, status=400)
             response.delete_cookie('accessToken')
             response.delete_cookie('refreshToken')
             response.delete_cookie('googleRefreshToken')
