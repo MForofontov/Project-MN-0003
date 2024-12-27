@@ -79,7 +79,10 @@ class GoogleCallbackView(View):
         # Check if user exists, create if not
         user, created = CustomUser.objects.get_or_create(
             email=email,
-            defaults={'first_name': first_name, 'last_name': last_name, 'username': email}
+            defaults={'first_name': first_name,
+                      'last_name': last_name,
+                      'registration_method': 'google',
+                      'is_email_confirmed': True}
         )
 
         # Store the Google refresh token in the user's profile or another secure location
