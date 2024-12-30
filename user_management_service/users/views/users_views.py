@@ -51,7 +51,7 @@ class UserCreateView(generics.CreateAPIView):
         headers: Dict[str, str] = self.get_success_headers(serializer.data)
         
         # If the user is created successfully, send an email verification link
-        send_verification_email.delay(user.id)
+        #send_verification_email.delay(user.id)
         
         # Return the serialized data with a 201 Created status
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
