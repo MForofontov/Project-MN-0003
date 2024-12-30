@@ -109,4 +109,3 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 User = get_user_model()
-
