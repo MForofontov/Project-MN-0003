@@ -21,7 +21,7 @@ class UserCreateView(generics.CreateAPIView):
     # Specify the serializer class to use
     serializer_class = UserSerializer
 
-    def create(self, request: HttpRequest, *args: Any, **kwargs: Any) -> Response:
+    def create(self, request: HttpRequest) -> Response:
         """
         Handles POST requests to create a new user.
 
@@ -63,7 +63,7 @@ class UserProfileView(APIView):
     # Require the user to be authenticated to access this view
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> Response:
+    def get(self, request: HttpRequest) -> Response:
         """
         Handles GET requests to retrieve the profile of the authenticated user.
 
@@ -84,7 +84,7 @@ class UserProfileView(APIView):
         # Return the serialized data with a 200 OK status
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> Response:
+    def post(self, request: HttpRequest) -> Response:
         """
         Handles POST requests to update the profile of the authenticated user.
 
@@ -119,7 +119,7 @@ class UserStatusView(APIView):
     # Require the user to be authenticated to access this view
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+    def get(self, request: HttpRequest) -> HttpResponse:
         """
         Handles GET requests to check if the user is authenticated.
 
@@ -143,7 +143,7 @@ class RequestEmailConfirmation(APIView):
     # Require the user to be authenticated to access this view
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> Response:
+    def post(self, request: HttpRequest) -> Response:
         """
         Handles POST requests to request email confirmation for the authenticated user.
 
