@@ -3,9 +3,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from users.serializers import UserSerializer, UserProfileSerializer
 from django.contrib.auth import get_user_model
-from rest_framework.decorators import permission_classes
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from models import CustomUser
+from users.tasks.send_verification_email import send_verification_email
 from typing import Any, Dict
 
 # Import the user model
@@ -49,7 +49,9 @@ class UserCreateView(generics.CreateAPIView):
         user: CustomUser = serializer.save()
         # Get the headers for the response
         headers: Dict[str, str] = self.get_success_headers(serializer.data)
-        # Optionally: Add any post-creation logic here (e.g., sending a welcome email)
+        
+        # If the user is created successfully, send an email verification link
+        send_verification_email.delay(user.id)
         
         # Return the serialized data with a 201 Created status
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
