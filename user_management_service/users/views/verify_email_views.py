@@ -48,7 +48,7 @@ class VerifyEmailView(APIView):
 
         # Check if the token is valid
         if user is not None and email_verification_token.check_token(user, token):
-            user.is_email_confirmed = True
+            user.is_email_verified = True
             user.save()
             return JsonResponse({'message': 'Email verified successfully.'})
         else:
@@ -56,14 +56,14 @@ class VerifyEmailView(APIView):
 
 class RequestEmailVerificationView(APIView):
     """
-    View to request email confirmation for the authenticated user.
+    View to request email verification for the authenticated user.
     """
     # Require the user to be authenticated to access this view
     permission_classes = [IsAuthenticated]
 
     def post(self, request: HttpRequest) -> Response:
         """
-        Handles POST requests to request email confirmation for the authenticated user.
+        Handles POST requests to request email verification for the authenticated user.
 
         Parameters
         ----------
@@ -73,17 +73,17 @@ class RequestEmailVerificationView(APIView):
         Returns
         -------
         Response
-            A response indicating that the email confirmation request has been sent.
+            A response indicating that the email verification request has been sent.
         """
         # Get the authenticated user
         user: CustomUser = request.user
 
-        # Check if the user's email is already confirmed
-        if user.is_email_confirmed:
-            return Response({"message": "Email is already confirmed"}, status=status.HTTP_200_OK)
+        # Check if the user's email is already verified
+        if user.is_email_verified:
+            return Response({"message": "Email is already verified"}, status=status.HTTP_200_OK)
 
         # Send the email verification link
         send_verification_email.delay(user.id)
 
-        # Return a response indicating that the email confirmation request has been sent
-        return Response({"message": "Email confirmation request sent"}, status=status.HTTP_200_OK)
+        # Return a response indicating that the email verification request has been sent
+        return Response({"message": "Email verification request sent"}, status=status.HTTP_200_OK)

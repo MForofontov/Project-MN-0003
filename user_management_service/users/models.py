@@ -89,7 +89,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     registration_method: str = models.CharField(max_length=20, choices=REGISTRATION_METHOD_CHOICES, default='custom')
     is_active: bool = models.BooleanField(default=True)
     is_staff: bool = models.BooleanField(default=False)
-    is_email_confirmed: bool = models.BooleanField(default=False)
+    is_email_verified: bool = models.BooleanField(default=False)
     date_joined: timezone.datetime = models.DateTimeField(default=timezone.now)
 
     objects: CustomUserManager = CustomUserManager()
