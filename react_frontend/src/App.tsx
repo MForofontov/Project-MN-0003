@@ -44,6 +44,7 @@ const AppContent: React.FC = () => {
         <Route path="/" element={<HomePage />} /> {/* Add a home route */}
         <Route path="/authentication" element={<PublicRoute component={Auth} />} /> {/* Add a login route with a public route wrapper */}
         <Route path="/dashboard" element={<PrivateRoute component={DashBoard} isSidebarVisible={isSidebarVisible} />} /> {/* Add a dashboard route with a private route wrapper */}
+        <Route path="/verify-email/:uidb64/:token" /> {/* Add a route for email verification */}
         {/* Add more routes as needed */}
         <Route path="/404" element={<NotFound />} /> {/* Route for the NotFound component */}
         <Route path="*" element={<Navigate to="/404" />} /> {/* Redirect to /404 for undefined paths */}
