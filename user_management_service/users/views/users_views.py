@@ -136,7 +136,7 @@ class UserStatusView(APIView):
         # Return a response indicating the user is authenticated
         return Response({"message": "User is authenticated"}, status=status.HTTP_200_OK)
 
-class RequestEmailConfirmation(APIView):
+class RequestEmailConfirmationView(APIView):
     """
     View to request email confirmation for the authenticated user.
     """

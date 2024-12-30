@@ -4,7 +4,8 @@ from users.views.authentication_views import (CustomTokenObtainPairView,
                                     LogoutView)
 from users.views.users_views import (UserCreateView,
                                      UserProfileView,
-                                     UserStatusView,)
+                                     UserStatusView,
+                                     RequestEmailConfirmationView)
 from users.views.csrf_token_views import get_csrf_token
 from users.views.google_auth import (GoogleLoginView,
                                      GoogleCallbackView,
@@ -30,4 +31,5 @@ urlpatterns = [
 
     # Email Verification
     path('verify-email/', VerifyEmailView.as_view(), name='verify-email'),
+    path('request-email-confirmation/', RequestEmailConfirmationView.as_view(), name='request-email-confirmation'),
 ]
