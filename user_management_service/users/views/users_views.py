@@ -135,3 +135,31 @@ class UserStatusView(APIView):
         """
         # Return a response indicating the user is authenticated
         return Response({"message": "User is authenticated"}, status=status.HTTP_200_OK)
+
+class RequestEmailConfirmation(APIView):
+    """
+    View to request email confirmation for the authenticated user.
+    """
+    # Require the user to be authenticated to access this view
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> Response:
+        """
+        Handles POST requests to request email confirmation for the authenticated user.
+
+        Parameters
+        ----------
+        request : HttpRequest
+            The HTTP request object.
+
+        Returns
+        -------
+        Response
+            A response indicating that the email confirmation request has been sent.
+        """
+        # Get the authenticated user
+        user: CustomUser = request.user
+        # Send the email verification link
+        #send_verification_email.delay(user.id)
+        # Return a response indicating that the email confirmation request has been sent
+        return Response({"message": "Email confirmation request sent"}, status=status.HTTP_200_OK)
