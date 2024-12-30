@@ -159,7 +159,13 @@ class RequestEmailConfirmation(APIView):
         """
         # Get the authenticated user
         user: CustomUser = request.user
+
+        # Check if the user's email is already confirmed
+        if user.is_email_confirmed:
+            return Response({"message": "Email is already confirmed"}, status=status.HTTP_200_OK)
+
         # Send the email verification link
         #send_verification_email.delay(user.id)
+
         # Return a response indicating that the email confirmation request has been sent
         return Response({"message": "Email confirmation request sent"}, status=status.HTTP_200_OK)
