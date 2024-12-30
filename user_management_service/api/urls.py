@@ -6,10 +6,10 @@ from users.views.users_views import (UserCreateView,
                                      UserProfileView,
                                      UserStatusView)
 from users.views.csrf_token_views import get_csrf_token
-from users.views.google_auth import (GoogleLoginView,
+from users.views.google_authentication_views import (GoogleLoginView,
                                      GoogleCallbackView,
                                      RefreshGoogleTokenView)
-from users.views.verify_email import (VerifyEmailView,
+from users.views.verify_email_views import (VerifyEmailView,
                                       RequestEmailConfirmationView)
 
 
