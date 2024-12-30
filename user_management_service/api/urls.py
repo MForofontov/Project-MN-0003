@@ -10,7 +10,7 @@ from users.views.google_authentication_views import (GoogleLoginView,
                                      GoogleCallbackView,
                                      RefreshGoogleTokenView)
 from users.views.verify_email_views import (VerifyEmailView,
-                                      RequestEmailConfirmationView)
+                                      RequestEmailVerificationView)
 
 
 urlpatterns = [
@@ -31,5 +31,5 @@ urlpatterns = [
 
     # Email Verification
     path('verify-email/', VerifyEmailView.as_view(), name='verify-email'),
-    path('request-email-confirmation/', RequestEmailConfirmationView.as_view(), name='request-email-confirmation'),
+    path('request-email-verification/', RequestEmailVerificationView.as_view(), name='request-email-verification'),
 ]

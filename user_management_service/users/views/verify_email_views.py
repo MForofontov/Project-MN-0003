@@ -54,7 +54,7 @@ class VerifyEmailView(APIView):
         else:
             return JsonResponse({'message': 'Email verification failed.'}, status=400)
 
-class RequestEmailConfirmationView(APIView):
+class RequestEmailVerificationView(APIView):
     """
     View to request email confirmation for the authenticated user.
     """
