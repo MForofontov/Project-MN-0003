@@ -58,8 +58,8 @@ class GoogleCallbackView(View):
         token_url: str = "https://oauth2.googleapis.com/token"
         token_data: dict = {
             'code': code,
-            'client_id': settings.SOCIALACCOUNT_PROVIDERS['google']['APP']['client_id'],
-            'client_secret': settings.SOCIALACCOUNT_PROVIDERS['google']['APP']['secret'],
+            'client_id': settings.GOOGLE_CLIENT_ID,
+            'client_secret': settings.GOOGLE_CLIENT_SECRET,
             'redirect_uri': 'http://localhost:8000/api/google/callback/',
             'grant_type': 'authorization_code'
         }
@@ -126,8 +126,8 @@ class RefreshGoogleTokenView(View):
 
         token_url: str = "https://oauth2.googleapis.com/token"
         token_data: dict = {
-            'client_id': settings.SOCIALACCOUNT_PROVIDERS['google']['APP']['client_id'],
-            'client_secret': settings.SOCIALACCOUNT_PROVIDERS['google']['APP']['secret'],
+            'client_id': settings.GOOGLE_CLIENT_ID,
+            'client_secret': settings.GOOGLE_CLIENT_SECRET,
             'refresh_token': google_refresh_token,
             'grant_type': 'refresh_token'
         }

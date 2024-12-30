@@ -21,6 +21,5 @@ urlpatterns = [
     path('google/login/', GoogleLoginView.as_view(), name='google-login'),
     path('google/callback/', GoogleCallbackView.as_view(), name='google-callback'),
     path('google/refresh_token', RefreshGoogleTokenView.as_view(), name='google-refresh-token'),
-    path('accounts/', include('allauth.urls')),
 
 ]
