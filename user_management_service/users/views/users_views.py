@@ -103,3 +103,27 @@ class UserProfileView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         # Return validation errors with a 400 Bad Request status
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserStatusView(APIView):
+    """
+    View to check if the user is authenticated.
+    """
+    # Require the user to be authenticated to access this view
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """
+        Handles GET requests to check if the user is authenticated.
+
+        Parameters
+        ----------
+        request : HttpRequest
+            The HTTP request object.
+
+        Returns
+        -------
+        HttpResponse
+            A response indicating the user is authenticated.
+        """
+        # Return a response indicating the user is authenticated
+        return Response({"message": "User is authenticated"}, status=status.HTTP_200_OK)
