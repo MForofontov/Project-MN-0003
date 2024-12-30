@@ -80,17 +80,17 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ('facebook', 'facebook_OAuth'),
     ]
 
-    email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=30, blank=True)
-    date_of_birth = models.DateField(blank=True, null=True)
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
-    address = models.CharField(max_length=255, blank=True)
-    registration_method = models.CharField(max_length=20, choices=REGISTRATION_METHOD_CHOICES, default='custom')
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    is_email_confirmed: bool = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(default=timezone.now)
+    email: str = models.EmailField(unique=True)
+    first_name: str = models.CharField(max_length=30, blank=True)
+    last_name: str = models.CharField(max_length=30, blank=True)
+    date_of_birth: Optional[str] = models.DateField(blank=True, null=True)
+    phone_number: Optional[str] = models.CharField(max_length=15, blank=True, null=True)
+    address: str = models.CharField(max_length=255, blank=True)
+    registration_method: str = models.CharField(max_length=20, choices=REGISTRATION_METHOD_CHOICES, default='custom')
+    is_active: bool = models.BooleanField(default=True)
+    is_staff: bool = models.BooleanField(default=False)
+    is_email_verified: bool = models.BooleanField(default=False)
+    date_joined: timezone.datetime = models.DateTimeField(default=timezone.now)
 
     objects: CustomUserManager = CustomUserManager()
 
@@ -109,4 +109,3 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 User = get_user_model()
-

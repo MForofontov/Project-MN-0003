@@ -4,7 +4,7 @@ const loginUserToken = async (email: string, password: string) => {
   try {
     const response = await callUserManagementAPI({
       method: 'post',
-      url: '/token/',
+      url: '/token/obtain',
       data: {
         email,
         password,

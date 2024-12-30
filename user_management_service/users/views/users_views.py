@@ -3,9 +3,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from users.serializers import UserSerializer, UserProfileSerializer
 from django.contrib.auth import get_user_model
-from rest_framework.decorators import permission_classes
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from models import CustomUser
+from users.tasks.send_verification_email import send_verification_email
 from typing import Any, Dict
 
 # Import the user model
@@ -21,7 +21,7 @@ class UserCreateView(generics.CreateAPIView):
     # Specify the serializer class to use
     serializer_class = UserSerializer
 
-    def create(self, request: HttpRequest, *args: Any, **kwargs: Any) -> Response:
+    def create(self, request: HttpRequest) -> Response:
         """
         Handles POST requests to create a new user.
 
@@ -35,6 +35,12 @@ class UserCreateView(generics.CreateAPIView):
         Response
             A response containing the serialized user data and a 201 Created status.
         """
+        # Check if the user already exists
+        email = request.data.get('email')
+        if CustomUser.objects.filter(email=email).exists():
+            return Response({'detail': 'User with this email already exists.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
         # Get the serializer with the request data
         serializer: UserSerializer = self.get_serializer(data=request.data)
         # Validate the data and raise an exception if invalid
@@ -43,7 +49,9 @@ class UserCreateView(generics.CreateAPIView):
         user: CustomUser = serializer.save()
         # Get the headers for the response
         headers: Dict[str, str] = self.get_success_headers(serializer.data)
-        # Optionally: Add any post-creation logic here (e.g., sending a welcome email)
+        
+        # If the user is created successfully, send an email verification link
+        #send_verification_email.delay(user.id)
         
         # Return the serialized data with a 201 Created status
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -55,7 +63,7 @@ class UserProfileView(APIView):
     # Require the user to be authenticated to access this view
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> Response:
+    def get(self, request: HttpRequest) -> Response:
         """
         Handles GET requests to retrieve the profile of the authenticated user.
 
@@ -76,7 +84,7 @@ class UserProfileView(APIView):
         # Return the serialized data with a 200 OK status
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> Response:
+    def post(self, request: HttpRequest) -> Response:
         """
         Handles POST requests to update the profile of the authenticated user.
 
@@ -103,3 +111,27 @@ class UserProfileView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         # Return validation errors with a 400 Bad Request status
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserStatusView(APIView):
+    """
+    View to check if the user is authenticated.
+    """
+    # Require the user to be authenticated to access this view
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        """
+        Handles GET requests to check if the user is authenticated.
+
+        Parameters
+        ----------
+        request : HttpRequest
+            The HTTP request object.
+
+        Returns
+        -------
+        HttpResponse
+            A response indicating the user is authenticated.
+        """
+        # Return a response indicating the user is authenticated
+        return Response({"message": "User is authenticated"}, status=status.HTTP_200_OK)
