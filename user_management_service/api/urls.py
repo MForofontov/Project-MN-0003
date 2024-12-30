@@ -4,13 +4,13 @@ from users.views.authentication_views import (CustomTokenObtainPairView,
                                     LogoutView)
 from users.views.users_views import (UserCreateView,
                                      UserProfileView,
-                                     UserStatusView,
-                                     RequestEmailConfirmationView)
+                                     UserStatusView)
 from users.views.csrf_token_views import get_csrf_token
 from users.views.google_auth import (GoogleLoginView,
                                      GoogleCallbackView,
                                      RefreshGoogleTokenView)
-from users.views.verify_email import VerifyEmailView
+from users.views.verify_email import (VerifyEmailView,
+                                      RequestEmailConfirmationView)
 
 
 urlpatterns = [
