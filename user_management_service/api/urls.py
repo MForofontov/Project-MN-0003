@@ -9,6 +9,7 @@ from users.views.csrf_token_views import get_csrf_token
 from users.views.google_auth import (GoogleLoginView,
                                      GoogleCallbackView,
                                      RefreshGoogleTokenView)
+from users.views.verify_email import VerifyEmailView
 
 
 urlpatterns = [
@@ -26,4 +27,7 @@ urlpatterns = [
     path('google/login/', GoogleLoginView.as_view(), name='google-login'),
     path('google/callback/', GoogleCallbackView.as_view(), name='google-callback'),
     path('google/refresh_token/', RefreshGoogleTokenView.as_view(), name='google-refresh-token'),
+
+    # Email Verification
+    path('verify-email/', VerifyEmailView.as_view(), name='verify-email'),
 ]
