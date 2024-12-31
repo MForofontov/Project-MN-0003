@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from django.http import HttpRequest
-from users.tokens import email_verification_token
+from users.tokens.email_verification_token import email_verification_token
 from users.models import CustomUser
 from users.tasks.send_verification_email import send_verification_email
 
