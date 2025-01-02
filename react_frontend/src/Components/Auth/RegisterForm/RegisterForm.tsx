@@ -1,4 +1,4 @@
-// Import necessary modules and components
+// Import React and necessary hooks
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
