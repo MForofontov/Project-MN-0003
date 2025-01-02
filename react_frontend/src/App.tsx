@@ -14,7 +14,7 @@ import { useAuth } from './utils/Contexts/AuthContext'; // Import the useAuth ho
 import ReactGA from 'react-ga'; // Import React Google Analytics
 
 // Initialize Google Analytics
-const trackingId = 'UA-XXXXXXXXX-X'; // Replace with your Google Analytics tracking ID
+const trackingId = process.env.REACT_APP_GOOGLE_ANALYTICS_ID; // Replace with your Google Analytics tracking ID
 ReactGA.initialize(trackingId);
 
 const App: React.FC = () => {
