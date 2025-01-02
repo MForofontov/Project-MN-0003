@@ -182,11 +182,14 @@ SIMPLE_JWT = {
 
 ## Auth cookie settings
 SIMPLE_JWT.update({
-    'AUTH_COOKIE': 'access_token',  # Cookie name. Can be changed.
+    'ACCESS_COOKIE': 'access_token',  # Cookie name. Can be changed.
+    'REFRESH_COOKIE': 'refresh_token',  # Cookie name. Can be changed.
     'AUTH_COOKIE_SECURE': True,  # Whether the auth cookies should be secure (https).
     'AUTH_COOKIE_HTTP_ONLY': True,  # Http only cookie flag. Can't be accessed by javascript.
     'AUTH_COOKIE_PATH': '/',  # The path of the auth cookie.
     'AUTH_COOKIE_SAMESITE': 'Lax',  # Same site cookie flag.
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Lifetime of the access token.
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # Lifetime of the refresh token.
 })
 
 AUTHENTICATION_BACKENDS = [

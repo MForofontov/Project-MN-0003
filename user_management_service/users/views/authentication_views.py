@@ -59,7 +59,7 @@ class CustomTokenRefreshView(TokenRefreshView):
             secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
             httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
             samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
-            max_age=3600  # 1 hour
+            max_age=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
         )
 
         # Remove the refresh and access tokens from the response data
@@ -103,23 +103,23 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
         # Set the access token in cookies
         response.set_cookie(
-            key=settings.SIMPLE_JWT['AUTH_COOKIE'],
+            key=settings.SIMPLE_JWT['ACCESS_COOKIE'],
             value=access_token,
             expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
             secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
             httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
             samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
-            max_age=3600  # 1 hour
+            max_age=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
         )
         # Set the refresh token in cookies
         response.set_cookie(
-            key='refreshToken',
+            key=settings.SIMPLE_JWT['REFRESH_COOKIE'],
             value=refresh_token,
             expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
             secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
             httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
             samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
-            max_age=3600 * 24  # 1 day
+            max_age=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME']
         )
 
         # Remove the refresh and access tokens from the response data
