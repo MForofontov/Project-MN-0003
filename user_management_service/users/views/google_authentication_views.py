@@ -28,7 +28,7 @@ class GoogleLoginView(View):
         google_auth_url: str = (
             "https://accounts.google.com/o/oauth2/v2/auth?"
             "response_type=code&"
-            f"client_id={settings.SOCIALACCOUNT_PROVIDERS['google']['APP']['client_id']}&"
+            f"client_id={settings.GOOGLE_CLIENT_ID}&"
             "redirect_uri=http://localhost:8000/api/google/callback/&"
             "scope=email profile"
         )

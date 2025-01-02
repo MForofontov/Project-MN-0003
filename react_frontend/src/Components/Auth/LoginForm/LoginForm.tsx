@@ -14,11 +14,11 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPassword, handleLoginUser, toggleForm }) => {
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:8000/api/accounts/google/login/';
+    window.location.href = 'http://localhost:8000/api/google/login/';
   };
 
   const handleFacebookLogin = () => {
-    window.location.href = 'http://localhost:8000/api/accounts/google/login/';
+    window.location.href = 'http://localhost:8000/api/facebook/login/';
   };
 
   return (
