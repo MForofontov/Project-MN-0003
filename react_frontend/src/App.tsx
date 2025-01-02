@@ -11,6 +11,11 @@ import NotFound from './utils/Components/NotFound/NotFound'; // Import the NotFo
 import DashBoard from './Components/DashBoard/DashBoard'; // Import the DashBoard component
 import { setupResponseInterceptorsRefreshToken } from './utils/ResponseInterceptors/setupResponseInterceptorsRefreshToken'; // Import the setupResponseInterceptorsRefreshToken function
 import { useAuth } from './utils/Contexts/AuthContext'; // Import the useAuth hook to access authentication context
+import ReactGA from 'react-ga'; // Import React Google Analytics
+
+// Initialize Google Analytics
+const trackingId = 'UA-XXXXXXXXX-X'; // Replace with your Google Analytics tracking ID
+ReactGA.initialize(trackingId);
 
 const App: React.FC = () => {
   return (
