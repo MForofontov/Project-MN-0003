@@ -96,8 +96,25 @@ class GoogleCallbackView(View):
 
         # Create response and set HTTP-only cookies for access and refresh tokens
         response: HttpResponse = HttpResponseRedirect('http://localhost:5173/dashboard')  # Replace with your frontend URL
-        response.set_cookie('accessToken', access_token_jwt, httponly=True, secure=False, samesite='Lax')
-        response.set_cookie('refreshToken', refresh_token_jwt, httponly=True, secure=False, samesite='Lax')
+        response.set_cookie(
+            key=settings.SIMPLE_JWT['ACCESS_COOKIE'],
+            value=access_token_jwt,
+            expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
+            max_age=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
+        )
+        
+        response.set_cookie(
+            key=settings.SIMPLE_JWT['REFRESH_COOKIE'],
+            value=refresh_token_jwt,
+            expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
+            max_age=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME']
+        )
         response.set_cookie('googleRefreshToken', google_refresh_token, httponly=True, secure=False, samesite='Lax')
 
         return response
