@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from users.serializers import UserSerializer, UserProfileSerializer
 from django.contrib.auth import get_user_model
 from django.http import HttpRequest, HttpResponse
-from models import CustomUser
+from users.models import CustomUser
 from users.tasks.send_verification_email import send_verification_email
 from typing import Any, Dict
 
