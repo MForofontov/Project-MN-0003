@@ -15,13 +15,13 @@ from users.views.verify_email_views import (VerifyEmailView,
 
 urlpatterns = [
     # User Management
-    path("create/", UserRegistrationView.as_view(), name="user-create"),
+    path('create/', UserRegistrationView.as_view(), name='user-create'),
     path('profile/', UserProfileView.as_view(), name='user-profile'),
     path('status/', UserStatusView.as_view(), name='user-status'),
 
     # Authentication
-    path('token/obtain', CustomTokenObtainPairView.as_view(), name='token-obtain-pair'),
-    path('token/refresh/', CustomTokenRefreshView.as_view(), name='token-refresh'),
+    path('login/', CustomTokenObtainPairView.as_view(), name='login'),
+    path('refresh-token/', CustomTokenRefreshView.as_view(), name='refresh-token'),
     path('logout/', LogoutView.as_view(), name='logout'),
 
     # Google OAuth

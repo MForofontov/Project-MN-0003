@@ -29,7 +29,7 @@ class CustomTokenRefreshView(TokenRefreshView):
         refresh_token: str = request.COOKIES.get('refreshToken')
         if not refresh_token:
             # Return an error response if the refresh token is missing
-            return Response({'detail': 'Refresh token missing'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'Refresh token missing'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Initialize the serializer with the refresh token
         serializer = self.get_serializer(data={'refresh': refresh_token})

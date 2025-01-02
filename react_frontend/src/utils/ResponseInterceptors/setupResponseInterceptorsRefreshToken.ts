@@ -22,7 +22,7 @@ const addRefreshSubscriber = (callback: () => void) => {
 // Function to refresh the token
 const refreshToken = async (): Promise<void> => {
   try {
-    await userManagementApi.post('/token/refresh/', {}); // Make a request to refresh the token
+    await userManagementApi.post('/refresh-token/', {}); // Make a request to refresh the token
     onRefreshed(); // Notify all subscribers
   } catch (error) {
     console.error('Error refreshing token:', error);
