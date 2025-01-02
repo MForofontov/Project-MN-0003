@@ -1,13 +1,20 @@
+// Import React and necessary hooks
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../Contexts/AuthContext'; // Import the useAuth hook
-import Loading from '../Components/Loading/Loading'; // Import the CustomSpinner component
 
+// Import context providers and hooks
+import { useAuth } from '../Contexts/AuthContext';
+
+// Import local components
+import Loading from '../Components/Loading/Loading';
+
+// Define the props for the PublicRoute component
 interface PublicRouteProps {
   component: React.ComponentType<any>;
   [key: string]: any; // Allow additional props
 }
 
+// Define the PublicRoute component
 const PublicRoute: React.FC<PublicRouteProps> = ({ component: Component, ...props }) => {
   const { isAuthenticated, isLoading } = useAuth(); // Get the authentication status from the AuthContext
 
@@ -27,4 +34,5 @@ const PublicRoute: React.FC<PublicRouteProps> = ({ component: Component, ...prop
   );
 };
 
+// Export the PublicRoute component as the default export
 export default PublicRoute;

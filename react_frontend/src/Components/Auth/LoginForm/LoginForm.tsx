@@ -1,30 +1,47 @@
+// Import React and necessary hooks
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
+// Import local components
 import FormGroup from '../FormGroup/FormGroup';
 import ToggleText from '../ToggleText/ToggleText';
+import ForeignLoginButtons from './ForeignLoginButtons/ForeignLoginButtons';
+
+// Import services and utilities
+import { handleLoginUser } from '../../../services/authHandlers';
+import { useAuth } from '../../../utils/Contexts/AuthContext';
+
+// Import CSS
 import './LoginForm.css';
 
+// Define the props for the LoginForm component
 interface LoginFormProps {
   email: string;
   setEmail: (email: string) => void;
   password: string;
   setPassword: (password: string) => void;
-  handleLoginUser: (e: React.FormEvent<HTMLFormElement>) => void;
   toggleForm: () => void;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPassword, handleLoginUser, toggleForm }) => {
-  const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:8000/api/accounts/google/login/';
+// Define the LoginForm component
+const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPassword, toggleForm }) => {
+  // Get the navigate function from useNavigate hook
+  const navigate = useNavigate();
+  
+  // Get the setIsAuthenticated function from useAuth hook
+  const { setIsAuthenticated } = useAuth();
+
+  // Define the onSubmit handler for the form
+  const onSubmit = (event: React.FormEvent) => {
+    // Call handleLoginUser with necessary arguments
+    handleLoginUser(event, email, password, navigate, setIsAuthenticated);
   };
 
-  const handleFacebookLogin = () => {
-    window.location.href = 'http://localhost:8000/api/accounts/google/login/';
-  };
-
+  // Render the login form
   return (
     <div className="login-form">
       <h2>Login</h2>
-      <form onSubmit={handleLoginUser}>
+      <form onSubmit={onSubmit}>
         <FormGroup
           label="Email:"
           type="text"
@@ -43,15 +60,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPas
         />
         <button type="submit" className="auth-button">Login</button>
       </form>
-      <button onClick={handleGoogleLogin} className="auth-button google-button">
-        Login with Google
-      </button>
-      <button onClick={handleFacebookLogin} className="auth-button facebook-button">
-        Login with Facebook
-      </button>
+      <ForeignLoginButtons />
       <ToggleText toggleForm={toggleForm} text="Don't have an account? Register" />
     </div>
   );
 };
 
+// Export the LoginForm component as the default export
 export default LoginForm;

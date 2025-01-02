@@ -28,7 +28,7 @@ class GoogleLoginView(View):
         google_auth_url: str = (
             "https://accounts.google.com/o/oauth2/v2/auth?"
             "response_type=code&"
-            f"client_id={settings.SOCIALACCOUNT_PROVIDERS['google']['APP']['client_id']}&"
+            f"client_id={settings.GOOGLE_CLIENT_ID}&"
             "redirect_uri=http://localhost:8000/api/google/callback/&"
             "scope=email profile"
         )
@@ -82,7 +82,7 @@ class GoogleCallbackView(View):
             defaults={'first_name': first_name,
                       'last_name': last_name,
                       'registration_method': 'google',
-                      'is_email_confirmed': True}
+                      'is_email_verified': True}
         )
 
         # Store the Google refresh token in the user's profile or another secure location
@@ -96,8 +96,25 @@ class GoogleCallbackView(View):
 
         # Create response and set HTTP-only cookies for access and refresh tokens
         response: HttpResponse = HttpResponseRedirect('http://localhost:5173/dashboard')  # Replace with your frontend URL
-        response.set_cookie('accessToken', access_token_jwt, httponly=True, secure=False, samesite='Lax')
-        response.set_cookie('refreshToken', refresh_token_jwt, httponly=True, secure=False, samesite='Lax')
+        response.set_cookie(
+            key=settings.SIMPLE_JWT['ACCESS_COOKIE'],
+            value=access_token_jwt,
+            expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
+            max_age=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
+        )
+        
+        response.set_cookie(
+            key=settings.SIMPLE_JWT['REFRESH_COOKIE'],
+            value=refresh_token_jwt,
+            expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
+            max_age=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME']
+        )
         response.set_cookie('googleRefreshToken', google_refresh_token, httponly=True, secure=False, samesite='Lax')
 
         return response

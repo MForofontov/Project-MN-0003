@@ -11,7 +11,7 @@ class CustomUserManager(BaseUserManager):
     Custom manager for CustomUser model.
     """
 
-    def create_user(self, email: str, extra_fields: Dict[str, Any], password: Optional[str] = None) -> 'CustomUser':
+    def create_user(self, email: str, password: Optional[str] = None, **extra_fields: Any) -> 'CustomUser':
         """
         Create and return a regular user with an email and password.
 
@@ -23,6 +23,8 @@ class CustomUserManager(BaseUserManager):
             Additional fields for the user.
         password : Optional[str], optional
             The password for the user.
+        **extra_fields : Dict[str, Any]
+            Extra fields for the user.
 
         Returns
         -------
@@ -42,7 +44,7 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email: str, extra_fields: Dict[str, Any], password: Optional[str] = None) -> 'CustomUser':
+    def create_superuser(self, email: str, password: Optional[str] = None, **extra_fields: Any) -> 'CustomUser':
         """
         Create and return a superuser with an email and password.
 
@@ -50,10 +52,10 @@ class CustomUserManager(BaseUserManager):
         ----------
         email : str
             The email address of the superuser.
-        extra_fields: Dict[str, Any]
-            Additional fields for the user.
         password : Optional[str], optional
             The password for the superuser.
+        **extra_fields : Dict[str, Any]
+            Extra fields for the superuser.
 
         Returns
         -------

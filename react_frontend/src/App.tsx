@@ -1,16 +1,31 @@
+// Import React and necessary hooks
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { AuthProvider } from './utils/Contexts/AuthContext'; // Import the AuthProvider to provide authentication context
-import Header from './Components/Header/Header'; // Import the Header component
-import Footer from './Components/Footer/Footer'; // Import the Footer component
-import HomePage from './Components/HomePage/HomePage'; // Import the HomePage component
-import Auth from './Components/Auth/Auth'; // Import the Auth component
-import PrivateRoute from './utils/Routes/PrivateRoute'; // Import the PrivateRoute component
-import PublicRoute from './utils/Routes/PublicRoute'; // Import the PublicRoute component
-import NotFound from './utils/Components/NotFound/NotFound'; // Import the NotFound component
-import DashBoard from './Components/DashBoard/DashBoard'; // Import the DashBoard component
-import { setupResponseInterceptorsRefreshToken } from './utils/ResponseInterceptors/setupResponseInterceptorsRefreshToken'; // Import the setupResponseInterceptorsRefreshToken function
-import { useAuth } from './utils/Contexts/AuthContext'; // Import the useAuth hook to access authentication context
+
+// Import context providers and hooks
+import { AuthProvider, useAuth } from './utils/Contexts/AuthContext';
+
+// Import local components
+import Header from './Components/Header/Header';
+import Footer from './Components/Footer/Footer';
+import HomePage from './Components/HomePage/HomePage';
+import Auth from './Components/Auth/Auth';
+import DashBoard from './Components/DashBoard/DashBoard';
+import NotFound from './utils/Components/NotFound/NotFound';
+
+// Import route utilities
+import PrivateRoute from './utils/Routes/PrivateRoute';
+import PublicRoute from './utils/Routes/PublicRoute';
+
+// Import response interceptors
+import { setupResponseInterceptorsRefreshToken } from './utils/ResponseInterceptors/setupResponseInterceptorsRefreshToken';
+
+// Import third-party libraries
+import ReactGA from 'react-ga';
+
+// Initialize Google Analytics
+const trackingId = process.env.REACT_APP_GOOGLE_ANALYTICS_ID; // Replace with your Google Analytics tracking ID
+ReactGA.initialize(trackingId);
 
 const App: React.FC = () => {
   return (

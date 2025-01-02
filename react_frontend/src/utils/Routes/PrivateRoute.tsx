@@ -1,14 +1,21 @@
+// Import React and necessary hooks
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../Contexts/AuthContext'; // Import the useAuth hook
-import Loading from '../Components/Loading/Loading'; // Import the CustomSpinner component
 
+// Import context providers and hooks
+import { useAuth } from '../Contexts/AuthContext';
+
+// Import local components
+import Loading from '../Components/Loading/Loading';
+
+// Define the props for the PrivateRoute component
 interface PrivateRouteProps {
   component: React.ComponentType<any>;
   isSidebarVisible: boolean;
   [key: string]: any; // Allow additional props
 }
 
+// Define the PrivateRoute component
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, isSidebarVisible, ...props }) => {
   const { isAuthenticated, isLoading } = useAuth(); // Get the authentication status from the AuthContext
 
@@ -28,4 +35,5 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, isSid
   );
 };
 
+// Export the PrivateRoute component as the default export
 export default PrivateRoute;

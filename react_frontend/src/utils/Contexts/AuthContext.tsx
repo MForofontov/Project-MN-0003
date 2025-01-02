@@ -1,4 +1,7 @@
+// Import necessary modules and hooks
 import { createContext, useState, useContext, ReactNode, useEffect, useMemo } from 'react';
+
+// Import services and utilities
 import { isAuthenticatedAPI } from '../../services/auth'; // API to check authentication status
 import LogOutAPI from '../../services/logOutAPI'; // API to log out
 import LoginUserToken from '../../services/loginUserToken'; // API to log in
@@ -20,6 +23,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null); // Authentication status
   const [isLoading, setLoading] = useState(true); // Loading state
 
+  // Check authentication status on component mount
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -60,7 +64,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.error('Error logging out:', error);
     }
   };
-
 
   // Memoize the context value
   const value = useMemo(

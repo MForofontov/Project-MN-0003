@@ -2,7 +2,7 @@ from django.urls import path, include
 from users.views.authentication_views import (CustomTokenObtainPairView,
                                     CustomTokenRefreshView,
                                     LogoutView)
-from users.views.users_views import (UserCreateView,
+from users.views.users_views import (UserRegistrationView,
                                      UserProfileView,
                                      UserStatusView)
 from users.views.csrf_token_views import get_csrf_token
@@ -15,13 +15,13 @@ from users.views.verify_email_views import (VerifyEmailView,
 
 urlpatterns = [
     # User Management
-    path("create/", UserCreateView.as_view(), name="user-create"),
+    path('create/', UserRegistrationView.as_view(), name='user-create'),
     path('profile/', UserProfileView.as_view(), name='user-profile'),
     path('status/', UserStatusView.as_view(), name='user-status'),
 
     # Authentication
-    path('token/obtain', CustomTokenObtainPairView.as_view(), name='token-obtain-pair'),
-    path('token/refresh/', CustomTokenRefreshView.as_view(), name='token-refresh'),
+    path('login/', CustomTokenObtainPairView.as_view(), name='login'),
+    path('refresh-token/', CustomTokenRefreshView.as_view(), name='refresh-token'),
     path('logout/', LogoutView.as_view(), name='logout'),
 
     # Google OAuth

@@ -1,17 +1,18 @@
 from rest_framework import generics, permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from users.serializers import UserSerializer, UserProfileSerializer
+from users.serializers import UserSerializer, UserProfileSerializer, CustomTokenObtainPairSerializer
 from django.contrib.auth import get_user_model
 from django.http import HttpRequest, HttpResponse
-from models import CustomUser
+from users.models import CustomUser
 from users.tasks.send_verification_email import send_verification_email
-from typing import Any, Dict
+from django.conf import settings
+from typing import Dict
 
 # Import the user model
 User = get_user_model()
 
-class UserCreateView(generics.CreateAPIView):
+class UserRegistrationView(generics.CreateAPIView):
     """
     View to create a new user.
     """
@@ -38,7 +39,7 @@ class UserCreateView(generics.CreateAPIView):
         # Check if the user already exists
         email = request.data.get('email')
         if CustomUser.objects.filter(email=email).exists():
-            return Response({'detail': 'User with this email already exists.'},
+            return Response({'message': 'User with this email already exists.'},
                             status=status.HTTP_400_BAD_REQUEST)
 
         # Get the serializer with the request data
@@ -52,9 +53,42 @@ class UserCreateView(generics.CreateAPIView):
         
         # If the user is created successfully, send an email verification link
         #send_verification_email.delay(user.id)
-        
-        # Return the serialized data with a 201 Created status
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+        # Generate tokens using the custom serializer
+        token_serializer = CustomTokenObtainPairSerializer(data={'email': email, 'password': request.data.get('password')})
+        token_serializer.is_valid(raise_exception=True)
+        tokens = token_serializer.validated_data
+
+        # Include tokens in the response data
+        response_data = serializer.data
+        response_data['tokens'] = tokens
+
+        # Create the response object
+        response = Response(response_data, status=status.HTTP_201_CREATED, headers=headers)
+
+        # Set the access token in cookies
+        response.set_cookie(
+            key=settings.SIMPLE_JWT['ACCESS_COOKIE'],
+            value=tokens['access'],
+            expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
+            max_age=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'].total_seconds()
+        )
+        # Set the refresh token in cookies
+        response.set_cookie(
+            key=settings.SIMPLE_JWT['REFRESH_COOKIE'],
+            value=tokens['refresh'],
+            expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
+            secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
+            httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
+            samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
+            max_age=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'].total_seconds()
+        )
+
+        # Return the response
+        return response
 
 class UserProfileView(APIView):
     """

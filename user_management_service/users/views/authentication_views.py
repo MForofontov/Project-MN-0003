@@ -29,7 +29,7 @@ class CustomTokenRefreshView(TokenRefreshView):
         refresh_token: str = request.COOKIES.get('refreshToken')
         if not refresh_token:
             # Return an error response if the refresh token is missing
-            return Response({'detail': 'Refresh token missing'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'Refresh token missing'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Initialize the serializer with the refresh token
         serializer = self.get_serializer(data={'refresh': refresh_token})
@@ -59,7 +59,7 @@ class CustomTokenRefreshView(TokenRefreshView):
             secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
             httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
             samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
-            max_age=3600  # 1 hour
+            max_age=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
         )
 
         # Remove the refresh and access tokens from the response data
@@ -103,23 +103,23 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
         # Set the access token in cookies
         response.set_cookie(
-            key=settings.SIMPLE_JWT['AUTH_COOKIE'],
+            key=settings.SIMPLE_JWT['ACCESS_COOKIE'],
             value=access_token,
             expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
             secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
             httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
             samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
-            max_age=3600  # 1 hour
+            max_age=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
         )
         # Set the refresh token in cookies
         response.set_cookie(
-            key='refreshToken',
+            key=settings.SIMPLE_JWT['REFRESH_COOKIE'],
             value=refresh_token,
             expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
             secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
             httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
             samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
-            max_age=3600 * 24  # 1 day
+            max_age=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME']
         )
 
         # Remove the refresh and access tokens from the response data
@@ -153,7 +153,7 @@ class LogoutView(APIView):
         # Create a response indicating successful logout
         response: Response = Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
         # Delete the access and refresh tokens from cookies
-        response.delete_cookie('accessToken')
-        response.delete_cookie('refreshToken')
+        response.delete_cookie(settings.SIMPLE_JWT['ACCESS_COOKIE'])
+        response.delete_cookie(settings.SIMPLE_JWT['REFRESH_COOKIE'])
         # Return the response
         return response

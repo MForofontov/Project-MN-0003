@@ -1,5 +1,5 @@
 from django.utils.http import urlsafe_base64_decode
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 from rest_framework import status
@@ -39,7 +39,7 @@ class VerifyEmailView(APIView):
         """
         try:
             # Decode the user ID
-            uid = force_text(urlsafe_base64_decode(uidb64))
+            uid = force_str(urlsafe_base64_decode(uidb64))
             
             # Get the user object
             user = User.objects.get(pk=uid)
