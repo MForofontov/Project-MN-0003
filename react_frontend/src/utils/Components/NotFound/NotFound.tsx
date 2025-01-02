@@ -1,6 +1,10 @@
+// Import React
 import React from 'react';
-import './NotFound.css'; // Import the CSS file
 
+// Import CSS for styling
+import './NotFound.css';
+
+// Define the NotFound component
 const NotFound: React.FC = () => (
   <div className="not-found-container">
     <h1 className="not-found-title">404 - Not Found</h1>
@@ -8,4 +12,5 @@ const NotFound: React.FC = () => (
   </div>
 );
 
+// Export the NotFound component as the default export
 export default NotFound;

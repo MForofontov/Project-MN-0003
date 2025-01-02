@@ -1,10 +1,16 @@
-import { callDataProcessingAPI } from './api';
+// Import necessary modules and functions
+import { callDataProcessingAPI } from './api'; // Import the API call function
+
+// Import necessary types
 import { AxiosResponse } from 'axios';
 
 /**
- * Uploads a file to the server.
- * @param file - The file to be uploaded.
- * @returns A promise that resolves to the response from the server.
+ * Function to upload a file by making a POST request to the file upload endpoint.
+ * 
+ * @param {File} file - The file to be uploaded.
+ * @param {string} title - The title associated with the file.
+ * @returns {Promise<AxiosResponse<any>>} - A promise that resolves with the server response when the upload is successful.
+ * @throws {Error} - Throws an error if the API call fails.
  */
 async function uploadFile(file: File, title: string): Promise<AxiosResponse<any>> {
     // Create a new FormData object
@@ -32,4 +38,5 @@ async function uploadFile(file: File, title: string): Promise<AxiosResponse<any>
     return response;
 }
 
+// Export the uploadFile function as the default export
 export default uploadFile;
