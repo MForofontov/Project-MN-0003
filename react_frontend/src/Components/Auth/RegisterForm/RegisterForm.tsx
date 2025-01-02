@@ -1,10 +1,19 @@
+// Import necessary modules and components
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+
+// Import local components
 import FormGroup from '../FormGroup/FormGroup';
 import ToggleText from '../ToggleText/ToggleText';
-import {handleRegisterUser } from '../../../services/authHandlers';
+
+// Import services and utilities
+import { handleRegisterUser } from '../../../services/authHandlers';
+import { useAuth } from '../../../utils/Contexts/AuthContext';
+
+// Import CSS
 import './RegisterForm.css';
 
+// Define the props for the RegisterForm component
 interface RegisterFormProps {
   email: string;
   setEmail: (email: string) => void;
@@ -13,13 +22,21 @@ interface RegisterFormProps {
   toggleForm: () => void;
 }
 
+// Define the RegisterForm component
 const RegisterForm: React.FC<RegisterFormProps> = ({ email, setEmail, password, setPassword, toggleForm }) => {
+  // Get the navigate function from useNavigate hook
   const navigate = useNavigate();
 
+  // Get the setIsAuthenticated function from useAuth hook
+  const { setIsAuthenticated } = useAuth();
+
+  // Define the onSubmit handler for the form
   const onSubmit = (event: React.FormEvent) => {
-    handleRegisterUser(event, email, password, navigate);
+    // Call handleRegisterUser with necessary arguments
+    handleRegisterUser(event, email, password, navigate, setIsAuthenticated);
   };
 
+  // Render the register form
   return (
     <div className="register-form">
       <h2>Register</h2>
@@ -42,9 +59,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ email, setEmail, password, 
         />
         <button type="submit" className="auth-button">Register</button>
       </form>
-      <ToggleText toggleForm={toggleForm} text="Don't have an account? Register" />
+      <ToggleText toggleForm={toggleForm} text="Already have an account? Login" />
     </div>
   );
 };
 
+// Export the RegisterForm component as the default export
 export default RegisterForm;
