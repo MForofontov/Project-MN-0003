@@ -105,7 +105,7 @@ services:
     image: redis:latest # Use the latest Redis image
     container_name: redis_user_management_service # Name the container redis_user_management_service
     ports:
-      - '6379:6379' # Map port 6378 of the host to port 6378 of the container
+      - '6379:6379' # Map port 6379 of the host to port 6379 of the container
     networks:
       - app-network # Connect to the app-network
 
@@ -113,7 +113,7 @@ services:
     image: redis:latest # Use the latest Redis image
     container_name: data_processing_service_redis # Name the container data_processing_service_redis
     ports:
-      - '6380:6380' # Map port 6379 of the host to port 6379 of the container
+      - '6380:6380' # Map port 6380 of the host to port 6380 of the container
     networks:
       - app-network # Connect to the app-network
 
