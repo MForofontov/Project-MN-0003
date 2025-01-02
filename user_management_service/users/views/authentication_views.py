@@ -153,7 +153,7 @@ class LogoutView(APIView):
         # Create a response indicating successful logout
         response: Response = Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
         # Delete the access and refresh tokens from cookies
-        response.delete_cookie('accessToken')
-        response.delete_cookie('refreshToken')
+        response.delete_cookie(settings.SIMPLE_JWT['ACCESS_COOKIE'])
+        response.delete_cookie(settings.SIMPLE_JWT['REFRESH_COOKIE'])
         # Return the response
         return response
