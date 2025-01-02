@@ -1,6 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import FormGroup from '../FormGroup/FormGroup';
 import ToggleText from '../ToggleText/ToggleText';
+import ForeignLoginButtons from './ForeignLoginButtons/ForeignLoginButtons';
+import { handleLoginUser } from '../../../services/authHandlers';
 import './LoginForm.css';
 
 interface LoginFormProps {
@@ -8,23 +11,21 @@ interface LoginFormProps {
   setEmail: (email: string) => void;
   password: string;
   setPassword: (password: string) => void;
-  handleLoginUser: (e: React.FormEvent<HTMLFormElement>) => void;
   toggleForm: () => void;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPassword, handleLoginUser, toggleForm }) => {
-  const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:8000/api/google/login/';
-  };
+const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPassword, toggleForm}) => {
 
-  const handleFacebookLogin = () => {
-    window.location.href = 'http://localhost:8000/api/facebook/login/';
+  const navigate = useNavigate();
+
+  const onSubmit = (event: React.FormEvent) => {
+    handleLoginUser(event, email, password, navigate);
   };
 
   return (
     <div className="login-form">
       <h2>Login</h2>
-      <form onSubmit={handleLoginUser}>
+      <form onSubmit={onSubmit}>
         <FormGroup
           label="Email:"
           type="text"
@@ -43,12 +44,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPas
         />
         <button type="submit" className="auth-button">Login</button>
       </form>
-      <button onClick={handleGoogleLogin} className="auth-button google-button">
-        Login with Google
-      </button>
-      <button onClick={handleFacebookLogin} className="auth-button facebook-button">
-        Login with Facebook
-      </button>
+      <ForeignLoginButtons />
       <ToggleText toggleForm={toggleForm} text="Don't have an account? Register" />
     </div>
   );
