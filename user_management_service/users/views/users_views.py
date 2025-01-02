@@ -38,7 +38,7 @@ class UserCreateView(generics.CreateAPIView):
         # Check if the user already exists
         email = request.data.get('email')
         if CustomUser.objects.filter(email=email).exists():
-            return Response({'detail': 'User with this email already exists.'},
+            return Response({'message': 'User with this email already exists.'},
                             status=status.HTTP_400_BAD_REQUEST)
 
         # Get the serializer with the request data

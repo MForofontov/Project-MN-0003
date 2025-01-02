@@ -82,7 +82,7 @@ class GoogleCallbackView(View):
             defaults={'first_name': first_name,
                       'last_name': last_name,
                       'registration_method': 'google',
-                      'is_email_confirmed': True}
+                      'is_email_verified': True}
         )
 
         # Store the Google refresh token in the user's profile or another secure location
