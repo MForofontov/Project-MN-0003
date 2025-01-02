@@ -52,7 +52,7 @@ class UserRegistrationView(generics.CreateAPIView):
         headers: Dict[str, str] = self.get_success_headers(serializer.data)
         
         # If the user is created successfully, send an email verification link
-        send_verification_email.delay(user.id)
+        #send_verification_email.delay(user.id)
 
         # Generate tokens using the custom serializer
         token_serializer = CustomTokenObtainPairSerializer(data={'email': email, 'password': request.data.get('password')})
@@ -61,30 +61,34 @@ class UserRegistrationView(generics.CreateAPIView):
 
         # Include tokens in the response data
         response_data = serializer.data
+        response_data['tokens'] = tokens
+
+        # Create the response object
+        response = Response(response_data, status=status.HTTP_201_CREATED, headers=headers)
 
         # Set the access token in cookies
-        response_data.set_cookie(
+        response.set_cookie(
             key=settings.SIMPLE_JWT['ACCESS_COOKIE'],
             value=tokens['access'],
             expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
             secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
             httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
             samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
-            max_age=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
+            max_age=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'].total_seconds()
         )
         # Set the refresh token in cookies
-        response_data.set_cookie(
+        response.set_cookie(
             key=settings.SIMPLE_JWT['REFRESH_COOKIE'],
             value=tokens['refresh'],
             expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
             secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
             httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
             samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE'],
-            max_age=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME']
+            max_age=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'].total_seconds()
         )
-        
-        # Return the serialized data with a 201 Created status
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+        # Return the response
+        return response
 
 class UserProfileView(APIView):
     """
