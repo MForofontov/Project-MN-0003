@@ -16,16 +16,13 @@ import NotFound from './utils/Components/NotFound/NotFound';
 // Import route utilities
 import PrivateRoute from './utils/Routes/PrivateRoute';
 import PublicRoute from './utils/Routes/PublicRoute';
+import initializeAnalytics from './services/analytics';
 
 // Import response interceptors
 import { setupResponseInterceptorsRefreshToken } from './utils/ResponseInterceptors/setupResponseInterceptorsRefreshToken';
 
-// Import third-party libraries
-import ReactGA from 'react-ga';
-
 // Initialize Google Analytics
-const trackingId = process.env.REACT_APP_GOOGLE_ANALYTICS_ID; // Replace with your Google Analytics tracking ID
-ReactGA.initialize(trackingId);
+initializeAnalytics();
 
 const App: React.FC = () => {
   return (
