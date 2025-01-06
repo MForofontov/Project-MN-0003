@@ -89,7 +89,7 @@ class ValidateEmailVerificationLinkView(APIView):
 
         # Check if the token is valid
         if user is not None and email_verification_token.check_token(user, token):
-            return JsonResponse({'message': 'Valid link.'})
+            JsonResponse({'message': 'Valid link.'})
         else:
             return JsonResponse({'message': 'Invalid link.'}, status=400)
 
