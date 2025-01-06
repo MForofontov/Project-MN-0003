@@ -47,6 +47,7 @@ services:
     depends_on:
       - db_user_management_service # Ensure the db_user_management_service starts before this service
       - redis_user_management_service # Ensure the redis_user_management_service starts before this service
+      - kafka # Ensure the kafka service starts before this service
     networks:
       - app-network # Connect to the app-network
 
@@ -64,6 +65,7 @@ services:
     depends_on:
       - db_data_processing_service # Ensure the db_data_processing_service starts before this service
       - data_processing_service_redis # Ensure the data_processing_service_redis starts before this service
+      - kafka # Ensure the kafka service starts before this service
     networks:
       - app-network # Connect to the app-network
 
@@ -116,6 +118,32 @@ services:
       - '6380:6380' # Map port 6380 of the host to port 6380 of the container
     networks:
       - app-network # Connect to the app-network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - '2181:2181'
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - app-network
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    ports:
+      - '9092:9092'
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
+    networks:
+      - app-network
 
 volumes:
   postgres_data_user_management: # Define the volume for the user management PostgreSQL data
