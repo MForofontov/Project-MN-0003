@@ -47,6 +47,7 @@ services:
     depends_on:
       - db_user_management_service # Ensure the db_user_management_service starts before this service
       - redis_user_management_service # Ensure the redis_user_management_service starts before this service
+      - celery_worker_user_management_service # Ensure the celery_worker_user_management_service starts before this service
       - kafka # Ensure the kafka service starts before this service
     networks:
       - app-network # Connect to the app-network
@@ -110,6 +111,19 @@ services:
       - '6379:6379' # Map port 6379 of the host to port 6379 of the container
     networks:
       - app-network # Connect to the app-network
+
+  celery_worker_user_management_service:
+    build:
+      context: ./user_management_service
+    container_name: celery_worker_user_management_service
+    command: celery -A user_management_service worker --loglevel=info
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - user_management_service
+    networks:
+      - app-network
 
   data_processing_service_redis:
     image: redis:latest # Use the latest Redis image
