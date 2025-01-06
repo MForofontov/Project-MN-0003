@@ -13,7 +13,12 @@ const EmailVerificationMessage: React.FC<EmailVerificationMessageProps> = ({ uid
     const verify = async () => {
       try {
         const response = await verifyEmail(uidb64, token);
-        setMessage(response.message);
+        if (response.message === 'Email verified successfully.') {
+            setMessage(response.message);
+        }
+        if (response.message === 'Email verification link has expired.') {
+            setMessage(response.message);
+        }
       } catch (error) {
         setMessage('An error occurred while verifying your email.');
       }

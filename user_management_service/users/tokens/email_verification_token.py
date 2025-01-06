@@ -1,4 +1,5 @@
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from datetime import datetime, timedelta
 
 class EmailVerificationTokenGenerator(PasswordResetTokenGenerator):
     """
@@ -27,6 +28,37 @@ class EmailVerificationTokenGenerator(PasswordResetTokenGenerator):
         return (
             str(user.pk) + str(timestamp) + str(user.is_email_confirmed)
         )
+
+    def has_token_expired(self, user, token):
+        """
+        Check if the token has expired.
+        """
+        try:
+            timestamp = self._get_timestamp(token)
+            expiration_date = datetime.fromtimestamp(timestamp) + timedelta(days=1)  # Assuming 1 day expiration
+            return datetime.now() > expiration_date
+        except Exception:
+            return False
+    
+    def _get_timestamp(self, token):
+        """
+        Extract the timestamp from the token.
+
+        Parameters
+        ----------
+        token : str
+            The token from which to extract the timestamp.
+
+        Returns
+        -------
+        int
+            The timestamp extracted from the token.
+        """
+        try:
+            ts_b36, _ = token.split("-")
+            return int(ts_b36, 36)
+        except ValueError:
+            return None
 
 # Create an instance of the EmailVerificationTokenGenerator
 email_verification_token = EmailVerificationTokenGenerator()

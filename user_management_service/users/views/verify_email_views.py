@@ -46,8 +46,12 @@ class VerifyEmailView(APIView):
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             user = None
 
+        if email_verification_token.has_token_expired(user, token):
+            return JsonResponse({'message': 'Email verification link has expired.'}, status=400)
         # Check if the token is valid
         if user is not None and email_verification_token.check_token(user, token):
+            if user.is_email_verified:
+                return JsonResponse({'message': 'Email is already verified.'})
             user.is_email_verified = True
             user.save()
             return JsonResponse({'message': 'Email verified successfully.'})
@@ -126,3 +130,4 @@ class RequestEmailVerificationView(APIView):
 
         # Return a response indicating that the email verification request has been sent
         return Response({"message": "Email verification request sent"}, status=status.HTTP_200_OK)
+

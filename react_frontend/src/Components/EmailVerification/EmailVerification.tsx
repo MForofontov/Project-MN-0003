@@ -24,7 +24,7 @@ const EmailVerification: React.FC = () => {
       };
   
       validateLink();
-    }, []);
+    }, [uidb64, token]);
   
     return (
       <div>
