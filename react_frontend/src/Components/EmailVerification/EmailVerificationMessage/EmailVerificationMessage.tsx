@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { verifyEmail } from '../../../services/verifyEmail';
+import { resendEmailVerification } from '../../../services/resendEmailVerification';
 
 interface EmailVerificationMessageProps {
   uidb64: string;
@@ -17,7 +18,8 @@ const EmailVerificationMessage: React.FC<EmailVerificationMessageProps> = ({ uid
             setMessage(response.message);
         }
         if (response.message === 'Email verification link has expired.') {
-            setMessage(response.message);
+            resendEmailVerification(uidb64);
+            setMessage(`${response.message} A new link has been sent to your email.`);
         }
       } catch (error) {
         setMessage('An error occurred while verifying your email.');
