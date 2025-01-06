@@ -30,13 +30,10 @@ export const verifyEmail = async (uidb64: string, token: string): Promise<Verify
     if (error instanceof AxiosError) {
       // Check if the error response status is 400 and contains the specific message
       if (error.response && error.response.status === 400) {
-        if (error.response.data.message === 'Email verification link has expired.') {
-          return { message: 'Email verification link has expired.' };
-        }
         return error.response.data;
       }
     }
-    // Return a generic error message for other statuses
+    // Return a generic error message for other statuses or if error.response is not defined
     return { message: 'Email verification failed due to an unexpected error.' };
   }
 };
