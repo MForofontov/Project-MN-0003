@@ -2,6 +2,7 @@ version: '3.8' # Specify the version of the Docker Compose file format
 
 services:
 
+  # NGINX service configuration
   nginx:
     build:
       context: ./nginx # Build the NGINX service from the nginx directory
@@ -18,6 +19,7 @@ services:
     networks:
       - app-network # Connect to the app-network
 
+  # React frontend service configuration
   react_frontend:
     build:
       context: ./react_frontend # Build the react_frontend service from the react_frontend directory
@@ -33,6 +35,7 @@ services:
     networks:
       - app-network # Connect to the app-network
 
+  # User management service configuration
   user_management_service:
     build:
       context: ./user_management_service # Build the user_management_service from the user_management_service directory
@@ -52,6 +55,7 @@ services:
     networks:
       - app-network # Connect to the app-network
 
+  # Data processing service configuration
   data_processing_service:
     build:
       context: ./data_processing_service # Build the data_processing_service from the data_processing_service directory
@@ -70,6 +74,7 @@ services:
     networks:
       - app-network # Connect to the app-network
 
+  # PostgreSQL service configuration for the user management service
   db_user_management_service:
     image: postgres:latest # Use the latest PostgreSQL image
     container_name: db_user_management_service # Name the container db_user_management_service
@@ -87,6 +92,7 @@ services:
     networks:
       - app-network # Connect to the app-network
 
+  # PostgreSQL service configuration for the data processing service
   db_data_processing_service:
     image: postgres:latest # Use the latest PostgreSQL image
     container_name: db_data_processing_service # Name the container db_data_processing_service
@@ -104,14 +110,7 @@ services:
     networks:
       - app-network # Connect to the app-network
 
-  redis_user_management_service:
-    image: redis:latest # Use the latest Redis image
-    container_name: redis_user_management_service # Name the container redis_user_management_service
-    ports:
-      - '6379:6379' # Map port 6379 of the host to port 6379 of the container
-    networks:
-      - app-network # Connect to the app-network
-
+  # Celery worker service configuration for the user management service
   celery_worker_user_management_service:
     build:
       context: ./user_management_service
@@ -120,11 +119,21 @@ services:
     env_file:
       - .env
     depends_on:
-      - redis
+      - redis_user_management_service
       - user_management_service
     networks:
       - app-network
 
+  # Redis service configuration for the user management service
+  redis_user_management_service:
+    image: redis:latest # Use the latest Redis image
+    container_name: redis_user_management_service # Name the container redis_user_management_service
+    ports:
+      - '6379:6379' # Map port 6379 of the host to port 6379 of the container
+    networks:
+      - app-network # Connect to the app-network
+
+  # Redis service configuration for the data processing service
   data_processing_service_redis:
     image: redis:latest # Use the latest Redis image
     container_name: data_processing_service_redis # Name the container data_processing_service_redis
@@ -133,31 +142,33 @@ services:
     networks:
       - app-network # Connect to the app-network
 
+  # Zookeeper service configuration
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
+    image: confluentinc/cp-zookeeper:latest # Use the latest Confluent Zookeeper image
+    container_name: zookeeper # Name the container zookeeper
     ports:
-      - '2181:2181'
+      - '2181:2181' # Map port 2181 of the host to port 2181 of the container
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_CLIENT_PORT: 2181 # Set the Zookeeper client port to 2181
+      ZOOKEEPER_TICK_TIME: 2000 # Set the tick time for Zookeeper
     networks:
-      - app-network
+      - app-network # Connect to the app-network
 
+  # Kafka service configuration
   kafka:
-    image: confluentinc/cp-kafka:latest
-    container_name: kafka
+    image: confluentinc/cp-kafka:latest # Use the latest Confluent Kafka image
+    container_name: kafka # Name the container kafka
     ports:
-      - '9092:9092'
+      - '9092:9092' # Map port 9092 of the host to port 9092 of the container
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_BROKER_ID: 1 # Set the Kafka broker ID to 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181' # Connect Kafka to the Zookeeper service on port 2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092 # Advertise Kafka listeners on port 9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 # Set the replication factor for the offsets topic to 1
     depends_on:
-      - zookeeper
+      - zookeeper # Ensure the zookeeper service starts before this service
     networks:
-      - app-network
+      - app-network # Connect to the app-network
 
 volumes:
   postgres_data_user_management: # Define the volume for the user management PostgreSQL data
