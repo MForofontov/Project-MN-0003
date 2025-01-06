@@ -32,6 +32,6 @@ urlpatterns = [
 
     # Email Verification
     path('verify-email/', VerifyEmailView.as_view(), name='verify-email'),
-    path('validate-email-verification-link/', ValidateEmailVerificationLinkView.as_view(), name='validate-email-verification-link'),
+    path('validate-email-verification-link/<uidb64>/<token>/', ValidateEmailVerificationLinkView.as_view(), name='validate_email_link'),
     path('request-email-verification/', RequestEmailVerificationView.as_view(), name='request-email-verification'),
 ]
