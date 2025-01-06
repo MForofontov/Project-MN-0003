@@ -1,27 +1,22 @@
-// Import necessary modules and functions
-import { callUserManagementAPI } from './api'; // Import the callUserManagementAPI function
+import { callUserManagementAPI } from './api';
 
-/**
- * Function to validate an email verification link by making a GET request to the validate-email-verification-link endpoint.
- * 
- * @param {string} token - The email verification token.
- * @returns {Promise<void>} - A promise that resolves when the email verification is successful.
- * @throws {Error} - Throws an error if the API call fails.
- */
-export const validateEmailVerificationLink = async (uidb64:string, token: string) => {
+export const validateEmailVerificationLink = async (uidb64: string, token: string): Promise<boolean> => {
   try {
     // Make a GET request to verify the email verification link
-    await callUserManagementAPI({
-      method: 'get', // Use lowercase for the HTTP method
+    const response = await callUserManagementAPI({
+      method: 'get',
       url: '/validate-email-verification-link/',
       params: {
         uidb64,
         token,
       },
     });
+    // If the request is successful and returns a 200 status code, return true
+    return response.status === 200;
   } catch (error) {
     // Log any errors that occur during the API call
     console.error('Error validating email verification link:', error);
-    throw error; // Throw error if the API call fails
+    // Return false if there is any error
+    return false;
   }
 };
