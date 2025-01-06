@@ -58,48 +58,6 @@ class VerifyEmailView(APIView):
         else:
             return JsonResponse({'message': 'Email verification failed.'}, status=400)
 
-class ValidateEmailVerificationLinkView(APIView):
-    """
-    View to validate email verification link.
-    """
-    permission_classes = [AllowAny]
-
-    def get(self, request):
-        """
-        Handles GET requests for email verification link validation.
-
-        Parameters
-        ----------
-        request : HttpRequest
-            The HTTP request object.
-        uidb64 : str
-            The base64 encoded user ID.
-        token : str
-            The verification token.
-
-        Returns
-        -------
-        JsonResponse
-            A JSON response indicating whether the link is valid or not.
-        """
-        uidb64 = request.GET.get('uidb64')
-        token = request.GET.get('token')
-
-        try:
-            # Decode the user ID
-            uid = force_str(urlsafe_base64_decode(uidb64))
-            
-            # Get the user object
-            user = User.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            user = None
-
-        # Check if the token is valid
-        if user is not None and email_verification_token.check_token(user, token):
-            JsonResponse({'message': 'Valid link.'})
-        else:
-            return JsonResponse({'message': 'Invalid link.'}, status=400)
-
 class RequestEmailVerificationView(APIView):
     """
     View to request email verification for the authenticated user.

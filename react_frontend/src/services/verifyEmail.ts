@@ -1,10 +1,15 @@
-import { callUserManagementAPI } from './api';
+// Axios imports
 import { AxiosResponse, AxiosError } from 'axios';
 
+// API call function import
+import { callUserManagementAPI } from './api';
+
+// Define the response interface for the verify email function
 interface VerifyEmailResponse {
   message: string;
 }
 
+// Define the verifyEmail function
 export const verifyEmail = async (uidb64: string, token: string): Promise<VerifyEmailResponse> => {
   try {
     // Make a GET request to verify the email verification link
@@ -12,8 +17,8 @@ export const verifyEmail = async (uidb64: string, token: string): Promise<Verify
       method: 'get',
       url: '/verify-email/',
       params: {
-        uidb64,
-        token,
+        uidb64, // Include uidb64 as a query parameter
+        token,  // Include token as a query parameter
       },
     });
     // Return the response data
