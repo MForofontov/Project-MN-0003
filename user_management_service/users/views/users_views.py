@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions, status
+from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from users.serializers import UserSerializer, UserProfileSerializer, CustomTokenObtainPairSerializer
@@ -12,17 +12,13 @@ from typing import Dict
 # Import the user model
 User = get_user_model()
 
-class UserRegistrationView(generics.CreateAPIView):
+class UserRegistrationView(APIView):
     """
     View to create a new user.
     """
     permission_classes = [permissions.AllowAny]
-    # Allow only POST requests
-    http_method_names = ['post']
-    # Specify the serializer class to use
-    serializer_class = UserSerializer
 
-    def create(self, request: HttpRequest) -> Response:
+    def post(self, request: HttpRequest) -> Response:
         """
         Handles POST requests to create a new user.
 
@@ -43,13 +39,11 @@ class UserRegistrationView(generics.CreateAPIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
         # Get the serializer with the request data
-        serializer: UserSerializer = self.get_serializer(data=request.data)
+        serializer = UserSerializer(data=request.data)
         # Validate the data and raise an exception if invalid
         serializer.is_valid(raise_exception=True)
         # Save the validated data to create a new user
-        user: CustomUser = serializer.save()
-        # Get the headers for the response
-        headers: Dict[str, str] = self.get_success_headers(serializer.data)
+        user = serializer.save()
         
         # If the user is created successfully, send an email verification link
         #send_verification_email.delay(user.id)
@@ -64,7 +58,7 @@ class UserRegistrationView(generics.CreateAPIView):
         response_data['tokens'] = tokens
 
         # Create the response object
-        response = Response(response_data, status=status.HTTP_201_CREATED, headers=headers)
+        response = Response(response_data, status=status.HTTP_201_CREATED)
 
         # Set the access token in cookies
         response.set_cookie(
