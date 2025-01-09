@@ -29,7 +29,9 @@ const EmailVerification: React.FC = () => {
         // Call the verifyEmail function with uidb64 and token
         const response = await verifyEmail(uidb64, token);
         if (response.message === 'Email verification link has expired.') {
-          resendEmailVerification
+          // Resend the email verification link if the link has expired
+          resendEmailVerification(uidb64);
+          // Update the message state with a new verification link message
           setMessage(`${response.message} A new verification link has been sent to your email.`);
         }
           
@@ -40,6 +42,7 @@ const EmailVerification: React.FC = () => {
       } else {
         // Set the message as invalid if uidb64 or token is missing
         setMessage('Invalid link.');
+        // Set loading to false if uidb64 or token is missing
         setIsLoading(false);
       }
     };
