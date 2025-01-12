@@ -22,5 +22,5 @@ vine==5.1.0
 requests==2.26.0
 wcwidth==0.2.13
 celery==5.4.0
-redis==4.0.2
+redis==5.2.1
 kafka-python==2.0.2
