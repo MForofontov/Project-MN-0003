@@ -46,7 +46,7 @@ class UserRegistrationView(APIView):
         user = serializer.save()
         
         # If the user is created successfully, send an email verification link
-        #send_verification_email.delay(user.id)
+        send_verification_email.delay(user.id)
 
         # Generate tokens using the custom serializer
         token_serializer = CustomTokenObtainPairSerializer(data={'email': email, 'password': request.data.get('password')})

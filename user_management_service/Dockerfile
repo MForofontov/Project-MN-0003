@@ -14,8 +14,11 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the current directory contents into the container at /Backend_docker
+# Copy the current directory contents into the container at /user_management_service_docker
 COPY . .
+
+# Ensure wait-for-it.sh is executable
+RUN chmod +x /user_management_service_docker/wait-for-it.sh
 
 # Expose the port the app runs on
 EXPOSE 8000
@@ -23,9 +26,6 @@ EXPOSE 8000
 # Set environment variables to avoid creating pyc files and keep the terminal unbuffered
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-
-# Install wait-for-it
-RUN apt-get update && apt-get install -y wait-for-it
 
 # Your entrypoint or CMD can use wait-for-it
 CMD ["sh", "entrypoint.sh"]
