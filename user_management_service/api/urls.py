@@ -10,7 +10,6 @@ from users.views.google_authentication_views import (GoogleLoginView,
                                      GoogleCallbackView,
                                      RefreshGoogleTokenView)
 from users.views.verify_email_views import (VerifyEmailView,
-                                            ValidateEmailVerificationLinkView,
                                             RequestEmailVerificationView,
                                             ResendEmailVerificationView)
 

@@ -50,7 +50,6 @@ services:
     depends_on:
       - db_user_management_service # Ensure the db_user_management_service starts before this service
       - redis_user_management_service # Ensure the redis_user_management_service starts before this service
-      - celery_worker_user_management_service # Ensure the celery_worker_user_management_service starts before this service
       - kafka # Ensure the kafka service starts before this service
     networks:
       - app-network # Connect to the app-network
