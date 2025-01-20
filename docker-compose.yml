@@ -141,37 +141,37 @@ services:
     networks:
       - app-network # Connect to the app-network
 
-  # Zookeeper service configuration
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest # Use the latest Confluent Zookeeper image
-    container_name: zookeeper # Name the container zookeeper
-    ports:
-      - '2181:2181' # Map port 2181 of the host to port 2181 of the container
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181 # Set the Zookeeper client port to 2181
-      ZOOKEEPER_TICK_TIME: 2000 # Set the tick time for Zookeeper
-    networks:
-      - app-network # Connect to the app-network
-
-  # Kafka service configuration
+  # Kafka service configuration with KRaft
   kafka:
     image: confluentinc/cp-kafka:latest # Use the latest Confluent Kafka image
     container_name: kafka # Name the container kafka
     ports:
       - '9092:9092' # Map port 9092 of the host to port 9092 of the container
+      - '9093:9093' # Map port 9093 of the host to port 9093 of the container (for inter-broker communication)
     environment:
-      KAFKA_BROKER_ID: 1 # Set the Kafka broker ID to 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181' # Connect Kafka to the Zookeeper service on port 2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092 # Advertise Kafka listeners on port 9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 # Set the replication factor for the offsets topic to 1
-    depends_on:
-      - zookeeper # Ensure the zookeeper service starts before this service
+          KAFKA_BROKER_ID: ${KAFKA_BROKER_ID}
+          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: ${KAFKA_LISTENER_SECURITY_PROTOCOL_MAP}
+          KAFKA_ADVERTISED_LISTENERS: ${KAFKA_ADVERTISED_LISTENERS}
+          KAFKA_LISTENERS: ${KAFKA_LISTENERS}
+          KAFKA_INTER_BROKER_LISTENER_NAME: ${KAFKA_INTER_BROKER_LISTENER_NAME}
+          KAFKA_CONTROLLER_QUORUM_VOTERS: ${KAFKA_CONTROLLER_QUORUM_VOTERS}
+          KAFKA_PROCESS_ROLES: ${KAFKA_PROCESS_ROLES}
+          KAFKA_NODE_ID: ${KAFKA_NODE_ID}
+          KAFKA_LOG_DIRS: ${KAFKA_LOG_DIRS}
+          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: ${KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR}
+          KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: ${KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR}
+          KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: ${KAFKA_TRANSACTION_STATE_LOG_MIN_ISR}
+          KAFKA_MIN_INSYNC_REPLICAS: ${KAFKA_MIN_INSYNC_REPLICAS}
+          KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: ${KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS}
+    volumes:
+      - kafka_data:/var/lib/kafka/data
     networks:
       - app-network # Connect to the app-network
 
 volumes:
   postgres_data_user_management: # Define the volume for the user management PostgreSQL data
   postgres_data_data_processing: # Define the volume for the data processing PostgreSQL data
+  kafka_data: # Define the volume for the Kafka data
 
 networks:
   app-network:
