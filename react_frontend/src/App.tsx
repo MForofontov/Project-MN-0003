@@ -25,7 +25,7 @@ const App: React.FC = () => {
   useEffect(() => {
     // Initialize Google Analytics
     initializeAnalytics();
-  }, []);
+  }, []); // Dependency array ensures this effect runs only once
 
 
   return (
