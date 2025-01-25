@@ -21,10 +21,13 @@ import initializeAnalytics from './services/analytics';
 // Import response interceptors
 import { setupResponseInterceptorsRefreshToken } from './utils/ResponseInterceptors/setupResponseInterceptorsRefreshToken';
 
-// Initialize Google Analytics
-initializeAnalytics();
-
 const App: React.FC = () => {
+  useEffect(() => {
+    // Initialize Google Analytics
+    initializeAnalytics();
+  }, []);
+
+
   return (
     <AuthProvider> {/* Provide authentication context to the entire app */}
       <Router> {/* Set up the router for navigation */}

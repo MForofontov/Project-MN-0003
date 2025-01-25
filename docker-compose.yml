@@ -143,7 +143,7 @@ services:
 
   # Kafka service configuration with KRaft
   kafka:
-    image: confluentinc/cp-kafka:latest # Use the latest Confluent Kafka image
+    image: apache/kafka:latest # Use the latest Confluent Kafka image
     container_name: kafka # Name the container kafka
     ports:
       - '9092:9092' # Map port 9092 of the host to port 9092 of the container
