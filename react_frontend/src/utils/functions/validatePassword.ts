@@ -1,23 +1,13 @@
-interface PasswordValidationResult {
-    isValid: boolean;
-    failedCriteria: string[];
-  }
+const validatePassword = (password: string): boolean => {
+    const criteria = [
+      { text: 'At least 8 characters', test: (pw: string) => pw.length >= 8 },
+      { text: 'At least one uppercase letter', test: (pw: string) => /[A-Z]/.test(pw) },
+      { text: 'At least one lowercase letter', test: (pw: string) => /[a-z]/.test(pw) },
+      { text: 'At least one number', test: (pw: string) => /\d/.test(pw) },
+      { text: 'At least one special character', test: (pw: string) => /[!@#$%^&*(),.?":{}|<>]/.test(pw) },
+    ];
   
-const validatePassword = (password: string): PasswordValidationResult => {
-const criteria = [
-    { regex: /[A-Z]/, message: 'at least one uppercase letter' },
-    { regex: /[a-z]/, message: 'at least one lowercase letter' },
-    { regex: /[0-9]/, message: 'at least one number' },
-    { regex: /[^A-Za-z0-9]/, message: 'at least one special character' },
-    { regex: /.{8,}/, message: 'at least 8 characters long' },
-];
-
-const failedCriteria = criteria.filter(criterion => !criterion.regex.test(password)).map(c => c.message);
-
-return {
-    isValid: failedCriteria.length === 0,
-    failedCriteria,
+    return criteria.every(criterion => criterion.test(password));
 };
-};
-
+  
 export default validatePassword;

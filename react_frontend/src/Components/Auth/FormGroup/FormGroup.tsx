@@ -9,6 +9,7 @@ interface FormGroupProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   id: string;
   name: string;
+  validatePassword?: (value: string) => void
 }
 
 const FormGroup: React.FC<FormGroupProps> = ({ label, type, value, onChange, id, name }) => {
