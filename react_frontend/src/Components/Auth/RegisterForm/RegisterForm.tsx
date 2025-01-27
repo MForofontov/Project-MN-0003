@@ -13,7 +13,8 @@ import CustomAlert from '../../../utils/Components/CustomAlert/CustomAlert';
 // Import services and utilities
 import { handleRegisterUser } from '../../../services/authHandlers';
 import { useAuth } from '../../../utils/Contexts/AuthContext';
-import validatePassword from '../../../utils/functions/validatePassword';
+import isValidPassword from '../../../utils/functions/isValidPassword';
+import isValidEmail from '../../../utils/functions/isValidEmail';
 
 // Import CSS
 import './RegisterForm.css';
@@ -40,11 +41,17 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ email, setEmail, password, 
   // Define the onSubmit handler for the form
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (validatePassword(password)) {
-      // Call handleRegisterUser with necessary arguments
-      handleRegisterUser(event, email, password, navigate, setIsAuthenticated);
+    let errorMessage = '';
+    if (!isValidEmail(email)) {
+      errorMessage += 'Invalid email address. ';
+    }
+    if (!isValidPassword(password)) {
+      errorMessage += 'Password does not meet the criteria.';
+    }
+    if (errorMessage) {
+      setError(errorMessage.trim());
     } else {
-      setError('Password does not meet the criteria');
+      handleRegisterUser(event, email, password, navigate, setIsAuthenticated);
     }
   };
 
@@ -55,7 +62,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ email, setEmail, password, 
       <form onSubmit={onSubmit}>
         <FormGroup
           label="Email:"
-          type="email"
+          type="text"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           id="email"

@@ -1,4 +1,4 @@
-const validatePassword = (password: string): boolean => {
+const isValidPassword = (password: string): boolean => {
     const criteria = [
       { text: 'At least 8 characters', test: (pw: string) => pw.length >= 8 },
       { text: 'At least one uppercase letter', test: (pw: string) => /[A-Z]/.test(pw) },
@@ -10,4 +10,4 @@ const validatePassword = (password: string): boolean => {
     return criteria.every(criterion => criterion.test(password));
 };
   
-export default validatePassword;
+export default isValidPassword;
