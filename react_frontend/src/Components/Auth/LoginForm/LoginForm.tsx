@@ -60,6 +60,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPas
         />
         <button type="submit" className="auth-button">Login</button>
       </form>
+      <div className="separator">or</div>
       <ForeignLoginButtons />
       <ToggleText toggleForm={toggleForm} text="Don't have an account? Register" />
     </div>
