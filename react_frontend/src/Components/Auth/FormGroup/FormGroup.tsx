@@ -21,20 +21,22 @@ const FormGroup: React.FC<FormGroupProps> = ({ label, type, value, onChange, id,
   return (
     <div className="form-group">
       <label htmlFor={id}>{label}</label>
-      <input
-        value={value}
-        onChange={onChange}
-        type={type === 'password' && isPasswordVisible ? 'text' : type}
-        id={id}
-        name={name}
-        required
-      />
-      {type === 'password' && (
-        <TogglePasswordButton
-          isPasswordVisible={isPasswordVisible}
-          togglePasswordVisibility={togglePasswordVisibility}
+      <div className="input-wrapper">
+        <input
+          value={value}
+          onChange={onChange}
+          type={type === 'password' && isPasswordVisible ? 'text' : type}
+          id={id}
+          name={name}
+          required
         />
-      )}
+        {type === 'password' && (
+          <TogglePasswordButton
+            isPasswordVisible={isPasswordVisible}
+            togglePasswordVisibility={togglePasswordVisibility}
+          />
+        )}
+      </div>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import './FormGroup.css';
+import './TogglePasswordButton.css';
 
 interface TogglePasswordButtonProps {
   isPasswordVisible: boolean;

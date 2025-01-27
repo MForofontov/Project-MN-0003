@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 // Import local components
 import FormGroup from '../FormGroup/FormGroup';
 import ToggleText from '../ToggleText/ToggleText';
-import ForeignLoginButtons from './ForeignLoginButtons/ForeignLoginButtons';
+import ForeignLoginButtons from '../ForeignLoginButtons/ForeignLoginButtons';
+import AuthSeparator from '../AuthSeparator/AuthSeparator';
 
 // Import services and utilities
 import { handleLoginUser } from '../../../services/authHandlers';
@@ -60,7 +61,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPas
         />
         <button type="submit" className="auth-button">Login</button>
       </form>
-      <div className="separator">or</div>
+      <AuthSeparator />
       <ForeignLoginButtons />
       <ToggleText toggleForm={toggleForm} text="Don't have an account? Register" />
     </div>
